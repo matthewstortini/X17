@@ -51,7 +51,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     // method from the base class
     virtual void GeneratePrimaries(G4Event*);
 
-        //G4GeneralParticleSource* fParticleGun;
+    //G4GeneralParticleSource* fParticleGun;
 
     // method to access particle gun
     const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
@@ -61,17 +61,17 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   private:
     static PrimaryGeneratorAction* fgInstance;
 
-   G4double X17mass;
-   G4double resonanceenergy;
+    G4double X17mass;
+    G4double resonanceenergy;
 
-   TGenPhaseSpace               PhaseSpaceEvent;
-   TLorentzVector X17;
-   TLorentzVector direction;
-   TLorentzVector combined;
+    TGenPhaseSpace PhaseSpaceEvent;
+    TLorentzVector X17;
+    TLorentzVector direction;
+    TLorentzVector combined;
 
-   std::vector<double>                                                          particle_mass;
-         std::vector<TLorentzVector*>                           particle_lorentz;
-         std::vector<G4ParticleDefinition*>     particle_definition;
+    std::vector<double> particle_mass;
+    std::vector<TLorentzVector*> particle_lorentz;
+    std::vector<G4ParticleDefinition*> particle_definition;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
