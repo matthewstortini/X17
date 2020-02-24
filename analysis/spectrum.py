@@ -25,6 +25,8 @@ def spectrum():
     # set up data to plot, and perform any necessary unit conversion
     m = list(df['theta'])
 
+    print(len(m))
+
     # plot simulation data
     plt.hist(m, np.arange(0,190,0.1), histtype='step', color = 'black')
     
