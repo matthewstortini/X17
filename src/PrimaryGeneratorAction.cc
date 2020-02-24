@@ -78,7 +78,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
  fDecayModeCmd = new G4UIcmdWithAString("/generator/setDecayMode", this);
  std::string candidates = "gamma x17";
  fDecayModeCmd->SetCandidates(candidates.c_str());
- fDecayModeCmd->SetGuidance("Set output format");
+ fDecayModeCmd->SetGuidance("Set decay mode of interest");
  fMode = kX17;
 
 }
