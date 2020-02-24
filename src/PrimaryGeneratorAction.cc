@@ -75,6 +75,12 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
  resonanceenergy = 0.01815;
  eventtype=0;
  
+ fDecayModeCmd = new G4UIcmdWithAString("/generator/setDecayMode", this);
+ std::string candidates = "alpha gamma epluseminus x17";
+ fDecayModeCmd->SetCandidates(candidates.c_str());
+ fDecayModeCmd->SetGuidance("Set output format");
+ fMode = kX17;
+
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooO
 
@@ -94,8 +100,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double ux = sinTheta*std::cos(phi),
            uy = sinTheta*std::sin(phi),
            uz = cosTheta;
-  G4double randomNumber = G4UniformRand();
-  if (randomNumber > 0.5){
+  if ( fMode == kX17 ) {
     eventtype =1;
     direction.SetPx(ux*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));
     direction.SetPy(uy*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));
@@ -120,7 +125,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       anEvent->AddPrimaryVertex(vertex);
           }
         }
-        else{
+  if ( fMode == kGamma ) {
          eventtype =0;
          G4PrimaryVertex* vertex = new G4PrimaryVertex(G4ThreeVector(0.0, 0.0, 0.0),0.0*s);
          G4PrimaryParticle* thePrimaryParticle = new G4PrimaryParticle(G4Gamma::GammaDefinition(),ux*resonanceenergy*GeV,uy*resonanceenergy*GeV,uz*resonanceenergy*GeV);
@@ -133,7 +138,16 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
+void PrimaryGeneratorAction::SetNewValue(G4UIcommand *command, G4String newValues) {
+      if(command == fDecayModeCmd) {
+        if(newValues == "x17") {
+          fMode = kX17;
+        }
+        if(newValues == "gamma") {
+          fMode = kGamma;
+        }
+    }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

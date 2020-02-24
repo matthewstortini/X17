@@ -14,6 +14,7 @@
 /tracking/recordAllSteps
 
 ##initialize the run
+/generator/setDecayMode x17
 /run/initialize
 /process/em/printParameters
 
