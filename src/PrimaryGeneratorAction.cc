@@ -71,9 +71,13 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
  }
  particle_lorentz.reserve(particle_definition.size());
  
+ fX17MassCmd = new G4UIcmdWithADouble("/generator/setX17Mass", this);
+ fX17MassCmd->SetGuidance("Set the mass of the hypothetical Boson in units of GeV");
  X17mass = 0.01670;
+
+ fResonanceEnergyCmd = new G4UIcmdWithADouble("/generator/setResonanceEnergy", this);
+ fResonanceEnergyCmd->SetGuidance("Set resonance energy in units of GeV");
  resonanceenergy = 0.01815;
- eventtype=0;
  
  fDecayModeCmd = new G4UIcmdWithAString("/generator/setDecayMode", this);
  std::string candidates = "gamma x17";
@@ -87,6 +91,9 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
   delete fParticleGun;
+  delete fX17MassCmd;
+  delete fResonanceEnergyCmd;
+  delete fDecayModeCmd;
   fgInstance = 0;
 }
 
@@ -147,7 +154,12 @@ void PrimaryGeneratorAction::SetNewValue(G4UIcommand *command, G4String newValue
           fMode = kGamma;
         }
     }
+      if (command == fX17MassCmd) {
+         X17mass = fX17MassCmd->GetNewDoubleValue(newValues);
+    }
+      if (command == fResonanceEnergyCmd) {
+         resonanceenergy = fResonanceEnergyCmd->GetNewDoubleValue(newValues);
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

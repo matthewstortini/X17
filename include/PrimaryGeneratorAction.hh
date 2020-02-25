@@ -29,6 +29,7 @@
 #include "G4GeneralParticleSource.hh"
 #include "G4ParticleGun.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithADouble.hh"
 #include "globals.hh"
 #include <vector>
 #include <TLorentzVector.h>
@@ -59,7 +60,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction, public G4UI
     G4ParticleGun*  fParticleGun; // pointer a to G4 gun class
     double eventtype;
 
-    // for setting macro commands
+    // for setting macro commands (i.e. decay mode, boson mass, resonance energy)
     void SetNewValue(G4UIcommand *command, G4String newValues);
 
   private:
@@ -80,6 +81,9 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction, public G4UI
     G4UIcmdWithAString* fDecayModeCmd;
     enum EMode { kGamma, kX17 };
     EMode fMode;
+
+    G4UIcmdWithADouble* fX17MassCmd;
+    G4UIcmdWithADouble* fResonanceEnergyCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
