@@ -80,7 +80,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
  resonanceenergy = 0.01815;
  
  fDecayModeCmd = new G4UIcmdWithAString("/generator/setDecayMode", this);
- std::string candidates = "gamma x17";
+ std::string candidates = "gamma x17 gun";
  fDecayModeCmd->SetCandidates(candidates.c_str());
  fDecayModeCmd->SetGuidance("Set decay mode of interest");
  fMode = kX17;
@@ -139,8 +139,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
          vertex->SetPrimary(thePrimaryParticle);
    anEvent->AddPrimaryVertex(vertex);
   }
+  if ( fMode == kGun ){;}  
   fParticleGun->GeneratePrimaryVertex(anEvent);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -152,6 +152,9 @@ void PrimaryGeneratorAction::SetNewValue(G4UIcommand *command, G4String newValue
         }
         if(newValues == "gamma") {
           fMode = kGamma;
+        }
+        if(newValues == "gun") {
+          fMode = kGun;
         }
     }
       if (command == fX17MassCmd) {

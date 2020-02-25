@@ -79,7 +79,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction, public G4UI
     std::vector<G4ParticleDefinition*> particle_definition;
 
     G4UIcmdWithAString* fDecayModeCmd;
-    enum EMode { kGamma, kX17 };
+    enum EMode { kGamma, kX17, kGun };
     EMode fMode;
 
     G4UIcmdWithADouble* fX17MassCmd;

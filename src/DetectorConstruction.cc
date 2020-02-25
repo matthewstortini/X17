@@ -82,6 +82,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   G4Material* vacuum = nist->FindOrBuildMaterial("G4_Galactic");
   G4Material* germanium = nist->FindOrBuildMaterial("G4_Ge");
+  G4Material* lithium = nist->FindOrBuildMaterial("G4_Li");
 
   //
   // World
@@ -127,7 +128,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4VPhysicalVolume* bege_phys
     = new G4PVPlacement(
                  0,                // no rotation
-                 G4ThreeVector(0,0,15*mm),  // at (0,0,15) mm
+                 G4ThreeVector(0,0,1000*mm),  // at (0,0,1000) mm
                  bege_logical,     // its logical volume                         
                  "bege",           // its name
                  logicWorld,       // its mother volume
@@ -137,6 +138,37 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   G4VisAttributes* begeVisAtt = new G4VisAttributes(G4Colour(1,1.0,0));
   bege_logical->SetVisAttributes(begeVisAtt);
+
+  //
+  // Lithium target foil
+  //
+  G4Tubs* foil_solid
+    = new G4Tubs("foil",           // its name
+                0*cm,              // innerRadius
+                3.5*cm,            // outerRadius
+                1.0*mm,            // half-height 
+                0,                 // start angle
+                2*M_PI);           // spanning angle
+
+  G4LogicalVolume* foil_logical
+    = new G4LogicalVolume(
+                 foil_solid,       // its solid
+                 lithium,          // its material
+                 "foil");          // its name
+
+  G4VPhysicalVolume* foil_phys
+    = new G4PVPlacement(
+                 0,                // no rotation
+                 G4ThreeVector(0,0,0), // at (0,0,0) mm
+                 foil_logical,     // its logical volume                         
+                 "foil",           // its name
+                 logicWorld,       // its mother volume
+                 false,            // no boolean operation
+                 0,                // copy number
+                 checkOverlaps);  // checking overlaps 
+
+  G4VisAttributes* foilVisAtt = new G4VisAttributes(G4Colour(0,1.0,0));
+  foil_logical->SetVisAttributes(foilVisAtt);
 
 return physWorld;
 }
