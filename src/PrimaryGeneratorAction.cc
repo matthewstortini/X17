@@ -140,7 +140,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
       anEvent->AddPrimaryVertex(vertex);
    }  
    
-   if ( fMode == kGun ) return;
+   if ( fMode == kGun ) {;}
 
    fParticleGun->GeneratePrimaryVertex(anEvent);
 

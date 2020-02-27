@@ -8,8 +8,7 @@
 /analysis/setFileName X17
 
 ##Set Volume ID's for Geometry Volumes (volume.in.geometry.file volID)
-/geometry/setVolID bege 1
-/geometry/setVolID foil 2
+/geometry/setVolID foil 1
 
 ##to track all steps, including steps for which Edep=0
 /tracking/recordAllSteps
@@ -24,7 +23,7 @@
 
 /gun/particle proton
 /gun/position 0 0 -20 mm
-/gun/energy 441 keV
+/gun/energy 1.00 MeV
 /gun/direction 0 0 1
 
 /run/beamOn 10000
