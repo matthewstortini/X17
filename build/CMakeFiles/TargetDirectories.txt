@@ -1,0 +1,7 @@
+/Users/stortini/Documents/Coding/X17/build/CMakeFiles/install/local.dir
+/Users/stortini/Documents/Coding/X17/build/CMakeFiles/install/strip.dir
+/Users/stortini/Documents/Coding/X17/build/CMakeFiles/install.dir
+/Users/stortini/Documents/Coding/X17/build/CMakeFiles/list_install_components.dir
+/Users/stortini/Documents/Coding/X17/build/CMakeFiles/rebuild_cache.dir
+/Users/stortini/Documents/Coding/X17/build/CMakeFiles/edit_cache.dir
+/Users/stortini/Documents/Coding/X17/build/CMakeFiles/X17.dir

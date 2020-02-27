@@ -35,14 +35,17 @@
 #include <TLorentzVector.h>
 #include <TGenPhaseSpace.h>
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class G4ParticleGun;
 class G4Event;
 class DetectorConstruction;
 
-/// The primary generator action class with particle gum.
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction, public G4UImessenger
-{
+/// The primary generator action class with particle gum.
+class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction, public G4UImessenger {
+
   public:
     PrimaryGeneratorAction();
     virtual ~PrimaryGeneratorAction();
@@ -84,6 +87,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction, public G4UI
 
     G4UIcmdWithADouble* fX17MassCmd;
     G4UIcmdWithADouble* fResonanceEnergyCmd;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

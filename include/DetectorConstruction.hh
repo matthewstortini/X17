@@ -27,12 +27,15 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class G4VPhysicalVolume;
 
-/// Detector construction class to define materials and geometry.
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorConstruction : public G4VUserDetectorConstruction
-{
+/// Detector construction class to define materials and geometry.
+class DetectorConstruction : public G4VUserDetectorConstruction {
+
   public:
     DetectorConstruction();
     virtual ~DetectorConstruction();
@@ -42,3 +45,4 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

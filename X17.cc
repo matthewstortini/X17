@@ -29,6 +29,8 @@
 #include "SteppingAction.hh"
 #include "PhysicsList.hh"
 
+#include "G4PhysListFactory.hh"
+
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 
@@ -44,74 +46,74 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv)
-{
-  // Choose the Random engine
-  //
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  CLHEP::HepRandom::setTheSeed(time(0));
-  // Construct the default run manager
-  //
-  G4RunManager * runManager = new G4RunManager;
+int main(int argc,char** argv) {
 
-  // Set mandatory initialization classes
-  //
-  // Detector construction
-  DetectorConstruction* detector = new DetectorConstruction();
-  runManager->SetUserInitialization(detector);
+   // Choose the Random engine
+   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+   CLHEP::HepRandom::setTheSeed(time(0));
 
-  // Physics list
-  PhysicsList* physicsList = new PhysicsList();
-  runManager->SetUserInitialization(physicsList);
+   // Construct the default run manager
+   G4RunManager * runManager = new G4RunManager;
 
-  // Primary generator action
-  PrimaryGeneratorAction* gen_action = new PrimaryGeneratorAction();
-  runManager->SetUserAction(gen_action);
+   // Set mandatory initialization classes
+   // Detector construction
+   DetectorConstruction* detector = new DetectorConstruction();
+   runManager->SetUserInitialization(detector);
+   // Physics list
+   PhysicsList* physicsList = new PhysicsList();
+   runManager->SetUserInitialization(physicsList);
+   // G4PhysListFactory factory;
+   // G4VModularPhysicsList* physicsList = 0;
+   // physicsList = factory.GetReferencePhysList("QGSP_BIC_AllHP");
+   // runManager->SetUserInitialization(physicsList);
+   // Primary generator action
+   PrimaryGeneratorAction* gen_action = new PrimaryGeneratorAction();
+   runManager->SetUserAction(gen_action);
 
-  // set tracking properties
-  //
-  // stepping action
-  G4UserSteppingAction* stepping_action = new SteppingAction();
-  runManager->SetUserAction(stepping_action);
+   // Set tracking properties
+   // Stepping action
+   G4UserSteppingAction* stepping_action = new SteppingAction();
+   runManager->SetUserAction(stepping_action);
 
-#ifdef G4VIS_USE
-  // Initialize visualization
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-#endif
+   #ifdef G4VIS_USE
+      // Initialize visualization
+      G4VisManager* visManager = new G4VisExecutive;
+      visManager->Initialize();
+   #endif
 
-  // Get the pointer to the User Interface manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+   // Get the pointer to the User Interface manager
+   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (argc!=1) {
-    // batch mode
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
-  }
-  else {
-    // interactive mode : define UI session
-#ifdef G4UI_USE
-    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-    UImanager->ApplyCommand("/control/execute vis.mac");
-#endif
-    ui->SessionStart();
-    delete ui;
-#endif
-  }
+   if (argc!=1) {
+      // batch mode
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UImanager->ApplyCommand(command+fileName);
+   }
+   else {
+      // interactive mode : define UI session
+      #ifdef G4UI_USE
+         G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+            #ifdef G4VIS_USE
+               UImanager->ApplyCommand("/control/execute vis.mac");
+            #endif
+      ui->SessionStart();
+      delete ui;
+      #endif
+   }
 
-  // Job termination
-  // Free the store: user actions, physics_list and detector_description are
-  // owned and deleted by the run manager, so they should not be deleted
-  // in the main() program !
+   // Job termination
+   // Free the store: user actions, physics_list and detector_description are
+   // owned and deleted by the run manager, so they should not be deleted
+   // in the main() program !
 
-#ifdef G4VIS_USE
-  delete visManager;
-#endif
-  delete runManager;
+   #ifdef G4VIS_USE
+      delete visManager;
+   #endif
+   delete runManager;
 
-  return 0;
+   return 0;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

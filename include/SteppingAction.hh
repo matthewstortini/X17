@@ -40,8 +40,10 @@
 
 using namespace std;
 
-class SteppingAction : public G4UserSteppingAction, public G4UImessenger
-{
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class SteppingAction : public G4UserSteppingAction, public G4UImessenger {
+
   protected:
     G4UIcommand* fVolIDCmd;
     G4UIcmdWithAString* fOutputFormatCmd;
@@ -95,3 +97,4 @@ class SteppingAction : public G4UserSteppingAction, public G4UImessenger
 
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
