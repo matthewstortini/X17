@@ -5,7 +5,7 @@
 
 ##Specify output file
 /analysis/setOutputFormat hdf5
-/analysis/setFileName X17
+/analysis/setFileName Proton_Li_Sim_1
 
 ##Set Volume ID's for Geometry Volumes (volume.in.geometry.file volID)
 /geometry/setVolID foil 1
@@ -26,4 +26,4 @@
 /gun/energy 1.00 MeV
 /gun/direction 0 0 1
 
-/run/beamOn 10000
+/run/beamOn 10

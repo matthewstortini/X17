@@ -72,7 +72,7 @@ int main(int argc,char** argv) {
 
    // Set tracking properties
    // Stepping action
-   G4UserSteppingAction* stepping_action = new SteppingAction();
+   G4UserSteppingAction* stepping_action = new SteppingAction(gen_action);
    runManager->SetUserAction(stepping_action);
 
    #ifdef G4VIS_USE

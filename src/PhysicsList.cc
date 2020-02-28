@@ -51,6 +51,7 @@ PhysicsList::PhysicsList() : G4VUserPhysicsList() {
    //cutForElectron = 1.0*nanometer;
    cutForElectron = defaultCutValue;
    cutForPositron = defaultCutValue;
+   cutForProton = 100.0*m;
 
    VerboseLevel = 0;
    OpVerbLevel = 0;
@@ -251,9 +252,9 @@ void PhysicsList::ConstructEM() {
    //set a finer grid of the physic tables in order to improve precision
    //former LowEnergy models have 200 bins up to 100 GeV
    G4EmProcessOptions opt;
-   opt.SetMaxEnergy(100*GeV);
-   opt.SetDEDXBinning(200);
-   opt.SetLambdaBinning(200);
+   opt.SetMaxEnergy(100*MeV);
+   opt.SetDEDXBinning(500);
+   opt.SetLambdaBinning(500);
 
    auto theParticleIterator=GetParticleIterator();
    theParticleIterator->reset();
@@ -334,7 +335,7 @@ void PhysicsList::ConstructEM() {
          pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
          //ionisation
          G4hIonisation* hIonisation = new G4hIonisation();
-         hIonisation->SetStepFunction(0.2, 50*um);
+         hIonisation->SetStepFunction(0.001, 1*nm);
          pmanager->AddProcess(hIonisation, -1, 2, 2);
          //bremmstrahlung
          pmanager->AddProcess(new G4hBremsstrahlung, -1, -3, 3);
@@ -858,6 +859,7 @@ void PhysicsList::SetCuts() {
    SetCutValue(cutForGamma, "gamma");
    SetCutValue(cutForElectron, "e-");
    SetCutValue(cutForPositron, "e+");
+   SetCutValue(cutForProton, "proton");
 
    if (verboseLevel>0) DumpCutValuesTable();
 

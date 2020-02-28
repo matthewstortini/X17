@@ -3,20 +3,18 @@ import h5py
 import pandas as pd
 import sys
 import matplotlib.pyplot as plt
+from matplotlib.colors import LogNorm
 plt.style.use('style.mplstyle')
 
 def main():
 
-    spectrum()
+    #angles()
+    depths()
 
-def spectrum():
-    """
-    This function simply plots an energy histogram. Run postprocesshdf5.py (function process()) on g4simple output file to get desired files 
-    for the dataframes defined below.
-    """ 
+def angles():
 
     if(len(sys.argv) != 2):
-        print('Usage: spectrum.py [input .hdf5 file (with extension)]')
+        print('Usage: plotting.py [input .hdf5 file (with extension)]')
         sys.exit()
 
     # read in pandas dataframe, and pull out data of interest
@@ -38,6 +36,28 @@ def spectrum():
     plt.tight_layout()
     #plt.semilogy()
     #plt.semilogx()
+    plt.show()
+
+
+def depths():
+
+    if(len(sys.argv) != 2):
+        print('Usage: plotting.py [input .hdf5 file (with extension)]')
+        sys.exit()
+
+    # read in pandas dataframe, and pull out data of interest
+    df =  pd.read_hdf("{}".format(sys.argv[1]), key="procdf")
+    df['z'] = df['z']*1000+1000
+    df['KE'] = df['KE']*1000
+
+    plt.hist2d(df['z'], df['KE'], np.arange(-1,1000,1), norm=LogNorm())
+    plt.xlabel('depth (micron)', ha='right', x=1.0)
+    plt.ylabel('energy (keV)', ha='right', y=1.0)
+    plt.ylim(300,1000)
+    plt.xlim(0,60)
+    cbar = plt.colorbar()
+    cbar.ax.set_ylabel('counts')
+    plt.tight_layout()
     plt.show()
 
 

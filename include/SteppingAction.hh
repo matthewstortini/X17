@@ -42,6 +42,10 @@ using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+class PrimaryGeneratorAction;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class SteppingAction : public G4UserSteppingAction, public G4UImessenger {
 
   protected:
@@ -56,7 +60,7 @@ class SteppingAction : public G4UserSteppingAction, public G4UImessenger {
     enum EOption { kStepWise, kEventWise };
     EOption fOption;
     bool fRecordAllSteps;
-
+    
     vector< pair<regex,string> > fPatternPairs;
 
     G4int fNEvents;
@@ -83,7 +87,7 @@ class SteppingAction : public G4UserSteppingAction, public G4UImessenger {
     map<G4VPhysicalVolume*, int> fVolIDMap;
 
   public:
-    SteppingAction();
+    SteppingAction(PrimaryGeneratorAction*);
     G4VAnalysisManager* GetAnalysisManager();
     ~SteppingAction();
 
@@ -94,6 +98,9 @@ class SteppingAction : public G4UserSteppingAction, public G4UImessenger {
     void WriteRow(G4VAnalysisManager* man);
 
     void UserSteppingAction(const G4Step *step);
+
+  private:
+    PrimaryGeneratorAction* primary;
 
 };
 

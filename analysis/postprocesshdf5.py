@@ -9,12 +9,10 @@ from tqdm import tqdm
 
 def main():
 
-    process()
+    #process_angles()
+    process_depth()
 
-def process():
-    ''' 
-    script here just sums up energy depositions for each event
-    '''
+def process_angles():
 
     if(len(sys.argv) != 3):
         print('Usage: postprocesshdf5.py [input filename.hdf5 (with extension)] [output filename.hdf5 (with extension)]')
@@ -46,10 +44,8 @@ def process():
     g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['KE']['pages']),
                        columns=['KE']), lsuffix = '_caller', rsuffix = '_other')
     
-    # Only keep data that corresponds to particles in the detector.
     df = g4sdf.loc[(g4sdf.parentID==0)&(g4sdf.step==0)&(g4sdf.pid!=0)&(g4sdf.pid!=22)]
 
-    # sum up energy of events 
     procdf= pd.DataFrame(df.groupby(['event'], as_index=False)['pdx','pdy','pdz'].prod())
 
     pdx_array = procdf['pdx'].values
@@ -60,6 +56,38 @@ def process():
 
     procdf['theta'] = theta_array
     procdf.drop(columns=['pdx', 'pdy','pdz'])
+
+    # Save the pandas dataframe.
+    procdf.to_hdf('{}'.format(sys.argv[2]), key='procdf', mode='w')
+
+
+def process_depth():
+
+    if(len(sys.argv) != 3):
+        print('Usage: postprocesshdf5.py [input filename.hdf5 (with extension)] [output filename.hdf5 (with extension)]')
+        sys.exit()
+
+    start = time.time()
+    print('In Progress...')
+
+    pd.options.mode.chained_assignment = None
+
+    # Import g4simple data
+    g4sfile = h5py.File(sys.argv[1], 'r')
+    g4sntuple = g4sfile['default_ntuples']['g4sntuple']
+
+    # Taking data from g4sntuple and organizing it into a pandas dataframe.
+    g4sdf = pd.DataFrame(np.array(g4sntuple['event']['pages']), columns=['event'])
+    g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['step']['pages']),
+                       columns=['step']), lsuffix = '_caller', rsuffix = '_other')
+    g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['pid']['pages']),
+                       columns=['pid']), lsuffix = '_caller', rsuffix = '_other')
+    g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['z']['pages']),
+                       columns=['z']), lsuffix = '_caller', rsuffix = '_other')
+    g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['KE']['pages']),
+                       columns=['KE']), lsuffix = '_caller', rsuffix = '_other')
+    
+    procdf = g4sdf.loc[(g4sdf.pid==2212)&(g4sdf.step>0)&(g4sdf.KE>0)]
 
     # Save the pandas dataframe.
     procdf.to_hdf('{}'.format(sys.argv[2]), key='procdf', mode='w')

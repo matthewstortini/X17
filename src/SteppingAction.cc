@@ -25,6 +25,7 @@
 //
 
 #include "SteppingAction.hh"
+#include "PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -53,7 +54,7 @@ void SteppingAction::ResetVars() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction() : fNEvents(0), fEventNumber(0) {
+SteppingAction::SteppingAction(PrimaryGeneratorAction* prim) : primary(prim), fNEvents(0), fEventNumber(0) {
 
    ResetVars();
 
@@ -355,6 +356,11 @@ void SteppingAction::UserSteppingAction(const G4Step *step) {
 
    // Don't write Edep=0 steps (unless desired)
    if(!fRecordAllSteps && step->GetTotalEnergyDeposit() == 0) return;
+
+   // kill proton at 300 keV
+   if ( primary->GetfMode() == "kGun") {
+      if (step->GetPreStepPoint()->GetKineticEnergy() <= 0.300) step->GetTrack()->SetTrackStatus(fStopAndKill);
+   }
 
    // Now record post-step info
    fVolID.push_back(id);

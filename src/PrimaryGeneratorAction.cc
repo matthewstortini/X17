@@ -79,7 +79,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() : G4VUserPrimaryGeneratorAction
    std::string candidates = "gamma x17 gun";
    fDecayModeCmd->SetCandidates(candidates.c_str());
    fDecayModeCmd->SetGuidance("Set decay mode of interest");
-   fMode = kX17;
+   fMode = "kX17";
 
 }
 
@@ -106,7 +106,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
             uy = sinTheta*std::sin(phi),
             uz = cosTheta;
   
-   if ( fMode == kX17 ) {
+   if ( fMode == "kX17" ) {
       eventtype =1;
       direction.SetPx(ux*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));
       direction.SetPy(uy*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));
@@ -132,7 +132,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
       }
    }
    
-   if ( fMode == kGamma ) {
+   if ( fMode == "kGamma" ) {
       eventtype =0;
       G4PrimaryVertex* vertex = new G4PrimaryVertex(G4ThreeVector(0.0, 0.0, 0.0),0.0*s);
       G4PrimaryParticle* thePrimaryParticle = new G4PrimaryParticle(G4Gamma::GammaDefinition(),ux*resonanceenergy*GeV,uy*resonanceenergy*GeV,uz*resonanceenergy*GeV);
@@ -140,7 +140,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
       anEvent->AddPrimaryVertex(vertex);
    }  
    
-   if ( fMode == kGun ) {;}
+   if ( fMode == "kGun" ) {;}
 
    fParticleGun->GeneratePrimaryVertex(anEvent);
 
@@ -151,14 +151,20 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
 void PrimaryGeneratorAction::SetNewValue(G4UIcommand *command, G4String newValues) {
    
    if(command == fDecayModeCmd) {   
-      if(newValues == "x17") fMode = kX17;
-      if(newValues == "gamma") fMode = kGamma;
-      if(newValues == "gun") fMode = kGun;
+      if(newValues == "x17") fMode = "kX17";
+      if(newValues == "gamma") fMode = "kGamma";
+      if(newValues == "gun") fMode = "kGun";
    }
 
    if (command == fX17MassCmd) X17mass = fX17MassCmd->GetNewDoubleValue(newValues);
    if (command == fResonanceEnergyCmd) resonanceenergy = fResonanceEnergyCmd->GetNewDoubleValue(newValues);
 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+std::string PrimaryGeneratorAction::GetfMode() {
+   return fMode;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

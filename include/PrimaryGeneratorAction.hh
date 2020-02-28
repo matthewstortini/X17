@@ -26,6 +26,8 @@
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 
+#include <string>
+
 #include "G4GeneralParticleSource.hh"
 #include "G4ParticleGun.hh"
 #include "G4UIcmdWithAString.hh"
@@ -66,6 +68,8 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction, public G4UI
     // for setting macro commands (i.e. decay mode, boson mass, resonance energy)
     void SetNewValue(G4UIcommand *command, G4String newValues);
 
+    std::string GetfMode();
+
   private:
     static PrimaryGeneratorAction* fgInstance;
 
@@ -82,9 +86,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction, public G4UI
     std::vector<G4ParticleDefinition*> particle_definition;
 
     G4UIcmdWithAString* fDecayModeCmd;
-    enum EMode { kGamma, kX17, kGun };
-    EMode fMode;
-
+    std::string fMode;
     G4UIcmdWithADouble* fX17MassCmd;
     G4UIcmdWithADouble* fResonanceEnergyCmd;
 
