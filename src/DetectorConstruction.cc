@@ -161,7 +161,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
             0,                           // copy number
             checkOverlaps);              // checking overlaps 
 
-   G4VisAttributes* foil_1+VisAtt = new G4VisAttributes(G4Colour(0,1.0,0));
+   G4VisAttributes* foil_1_VisAtt = new G4VisAttributes(G4Colour(0,1.0,0));
    foil_1_logical->SetVisAttributes(foil_1_VisAtt);
 
    //
