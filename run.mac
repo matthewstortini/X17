@@ -8,7 +8,8 @@
 /analysis/setFileName Proton_Li_Sim_1
 
 ##Set Volume ID's for Geometry Volumes (volume.in.geometry.file volID)
-/geometry/setVolID foil 1
+/geometry/setVolID foil_1 1
+/geometry/setVolID foil_2 2
 
 ##to track all steps, including steps for which Edep=0
 /tracking/recordAllSteps
