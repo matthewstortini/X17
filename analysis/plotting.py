@@ -9,7 +9,8 @@ plt.style.use('style.mplstyle')
 def main():
 
     #angles()
-    depths()
+    #depths()
+    resonance_positions()
 
 def angles():
 
@@ -47,10 +48,10 @@ def depths():
 
     # read in pandas dataframe, and pull out data of interest
     df =  pd.read_hdf("{}".format(sys.argv[1]), key="procdf")
-    df['z'] = df['z']*1000+1000
+    df['z'] = df['z']*1000+7.5
     df['KE'] = df['KE']*1000
 
-    plt.hist2d(df['z'], df['KE'], np.arange(-1,1000,1), norm=LogNorm())
+    plt.hist2d(df['z'], df['KE'], np.arange(-1,1001,1), norm=LogNorm())
     plt.xlabel('depth (micron)', ha='right', x=1.0)
     plt.ylabel('energy (keV)', ha='right', y=1.0)
     plt.ylim(300,1000)
@@ -60,6 +61,26 @@ def depths():
     plt.tight_layout()
     plt.show()
 
+
+def resonance_positions():
+
+    if(len(sys.argv) != 2):
+        print('Usage: plotting.py [input .hdf5 file (with extension)]')
+        sys.exit()
+
+    # read in pandas dataframe, and pull out data of interest
+    df =  pd.read_hdf("{}".format(sys.argv[1]), key="procdf")
+    df['x'] = df['x']*1000
+    df['y'] = df['y']*1000
+    df['z'] = df['z']*1000+7.5
+
+    plt.hist(df['z'], np.arange(-1,15,0.1), histtype='step', color = 'black')
+    plt.xlabel('z depth (micron)', ha='right', x=1.0)
+    plt.ylabel('counts', ha='right', y=1.0)
+    #plt.ylim(300,1000)
+    #plt.xlim(0,60)
+    plt.tight_layout()
+    plt.show()
 
 if __name__ == '__main__':
 	main()
