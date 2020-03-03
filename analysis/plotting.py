@@ -4,6 +4,7 @@ import pandas as pd
 import sys
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
+import json, os
 plt.style.use('style.mplstyle')
 
 def main():
@@ -18,8 +19,12 @@ def angles():
         print('Usage: plotting.py [input .hdf5 file (with extension)]')
         sys.exit()
 
+    with open("data.json") as f:
+        data = json.load(f)
+    data_dir = os.path.expandvars(data["data_dir"])
+
     # read in pandas dataframe, and pull out data of interest
-    df =  pd.read_hdf("{}".format(sys.argv[1]), key="procdf")
+    df =  pd.read_hdf("{}/{}".format(data_dir,sys.argv[1]), key="procdf")    
 
     # set up data to plot, and perform any necessary unit conversion
     m = list(df['theta'])
@@ -46,8 +51,12 @@ def depths():
         print('Usage: plotting.py [input .hdf5 file (with extension)]')
         sys.exit()
 
+    with open("data.json") as f:
+        data = json.load(f)
+    data_dir = os.path.expandvars(data["data_dir"])
+
     # read in pandas dataframe, and pull out data of interest
-    df =  pd.read_hdf("{}".format(sys.argv[1]), key="procdf")
+    df =  pd.read_hdf("{}/{}".format(data_dir,sys.argv[1]), key="procdf")
     df['z'] = df['z']*1000+7.5
     df['KE'] = df['KE']*1000
 
@@ -68,8 +77,12 @@ def resonance_positions():
         print('Usage: plotting.py [input .hdf5 file (with extension)]')
         sys.exit()
 
+    with open("data.json") as f:
+        data = json.load(f)
+    data_dir = os.path.expandvars(data["data_dir"])
+
     # read in pandas dataframe, and pull out data of interest
-    df =  pd.read_hdf("{}".format(sys.argv[1]), key="procdf")
+    df =  pd.read_hdf("{}/{}".format(data_dir,sys.argv[1]), key="procdf")
     df['x'] = df['x']*1000
     df['y'] = df['y']*1000
     df['z'] = df['z']*1000+7.5
@@ -81,6 +94,7 @@ def resonance_positions():
     #plt.xlim(0,60)
     plt.tight_layout()
     plt.show()
+
 
 if __name__ == '__main__':
 	main()

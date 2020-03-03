@@ -5,7 +5,7 @@
 
 ##Specify output file
 /analysis/setOutputFormat hdf5
-/analysis/setFileName Proton_Li_Sim_1
+/analysis/setFileName test
 
 ##Set Volume ID's for Geometry Volumes (volume.in.geometry.file volID)
 /geometry/setVolID foil_1 1

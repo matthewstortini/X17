@@ -360,6 +360,8 @@ void SteppingAction::UserSteppingAction(const G4Step *step) {
    // kill proton at 300 keV
    if ( primary->GetfMode() == "kGun") {
       if (step->GetPreStepPoint()->GetKineticEnergy() <= 0.439) step->GetTrack()->SetTrackStatus(fStopAndKill);
+      if (step->GetPreStepPoint()->GetKineticEnergy() >= 0.442) return;
+      if (step->GetTrack()->GetKineticEnergy() >= 0.442) return;
    }
 
    // Now record post-step info
