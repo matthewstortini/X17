@@ -75,6 +75,7 @@ target_link_libraries(${myexe} ${Geant4_LIBRARIES})
 set(X17_SCRIPTS
   vis.mac
   run.mac
+  run.sh
   )
 
 foreach(_script ${X17_SCRIPTS})
