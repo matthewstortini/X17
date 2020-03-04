@@ -107,20 +107,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
             uy = sinTheta*std::sin(phi),
             uz = cosTheta;
   
-   if ( fMode == "kX17" ) {
-      direction.SetPx(ux*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));
-      direction.SetPy(uy*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));
-      direction.SetPz(uz*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));
-      direction.SetE(resonanceenergy-X17mass); //in GeV
-
-      X17.SetPx(0);
-      X17.SetPy(0);
-      X17.SetPz(0);
-      X17.SetE(X17mass); //in GeV
-
-      combined = X17+direction;
-      PhaseSpaceEvent.SetDecay(combined, particle_definition.size(),particle_mass.data());
-
+   // if not running in gun mode, we load in the positions of our excited states
+   // these positions are to be obtained through previous runs in gun mode
+   if ( fMode != "kGun" ) {
       std::ifstream xPositionsFile("X17_xpositions.txt");
       if (xPositionsFile.is_open()) {
          while (xPositionsFile.good()) {
@@ -150,9 +139,23 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
          }
          zPositionsVec.pop_back();
       }
+   }
+   
+   if ( fMode == "kX17" ) {
+      direction.SetPx(ux*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));
+      direction.SetPy(uy*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));
+      direction.SetPz(uz*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));
+      direction.SetE(resonanceenergy-X17mass); //in GeV
+
+      X17.SetPx(0);
+      X17.SetPy(0);
+      X17.SetPz(0);
+      X17.SetE(X17mass); //in GeV
+
+      combined = X17+direction;
+      PhaseSpaceEvent.SetDecay(combined, particle_definition.size(),particle_mass.data());
 
       // random number between 0 and xPositionsVec.size()-1
-      srand (time(NULL));
       positionElement = rand() % xPositionsVec.size();
 
       double Weight = PhaseSpaceEvent.Generate();
@@ -167,7 +170,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
    }
    
    if ( fMode == "kGamma" ) {
-      G4PrimaryVertex* vertex = new G4PrimaryVertex(G4ThreeVector(0.0, 0.0, 0.0),0.0*s);
+      // random number between 0 and xPositionsVec.size()-1
+      positionElement = rand() % xPositionsVec.size();
+      G4PrimaryVertex* vertex = new G4PrimaryVertex(G4ThreeVector(xPositionsVec[positionElement], yPositionsVec[positionElement], zPositionsVec[positionElement]),0.0*s);
       G4PrimaryParticle* thePrimaryParticle = new G4PrimaryParticle(G4Gamma::GammaDefinition(),ux*resonanceenergy*GeV,uy*resonanceenergy*GeV,uz*resonanceenergy*GeV);
       vertex->SetPrimary(thePrimaryParticle);
       anEvent->AddPrimaryVertex(vertex);

@@ -52,6 +52,9 @@ int main(int argc,char** argv) {
    CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
    CLHEP::HepRandom::setTheSeed(time(0));
 
+   // set random seed so rand() can be used in PrimaryGeneratorAction
+   srand (time(NULL));
+
    // Construct the default run manager
    G4RunManager * runManager = new G4RunManager;
 
