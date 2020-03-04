@@ -108,7 +108,6 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
             uz = cosTheta;
   
    if ( fMode == "kX17" ) {
-      eventtype =1;
       direction.SetPx(ux*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));
       direction.SetPy(uy*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));
       direction.SetPz(uz*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));
@@ -168,7 +167,6 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
    }
    
    if ( fMode == "kGamma" ) {
-      eventtype =0;
       G4PrimaryVertex* vertex = new G4PrimaryVertex(G4ThreeVector(0.0, 0.0, 0.0),0.0*s);
       G4PrimaryParticle* thePrimaryParticle = new G4PrimaryParticle(G4Gamma::GammaDefinition(),ux*resonanceenergy*GeV,uy*resonanceenergy*GeV,uz*resonanceenergy*GeV);
       vertex->SetPrimary(thePrimaryParticle);

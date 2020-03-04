@@ -70,7 +70,6 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction, public G4UI
     // method to access particle gun
     const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
     G4ParticleGun*  fParticleGun; // pointer a to G4 gun class
-    double eventtype;
 
     // for setting macro commands (i.e. decay mode, boson mass, resonance energy)
     void SetNewValue(G4UIcommand *command, G4String newValues);
