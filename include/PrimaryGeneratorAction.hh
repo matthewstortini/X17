@@ -33,9 +33,16 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "globals.hh"
-#include <vector>
 #include <TLorentzVector.h>
 #include <TGenPhaseSpace.h>
+
+#include <stdlib.h>
+#include <time.h>
+#include <stdio.h>
+
+#include <iostream>
+#include <fstream>
+#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -68,7 +75,13 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction, public G4UI
     // for setting macro commands (i.e. decay mode, boson mass, resonance energy)
     void SetNewValue(G4UIcommand *command, G4String newValues);
 
+    // so stepping action can grab the mode one runs in
     std::string GetfMode();
+
+    // for setting position of X17 given resonance positions from running in gun mode
+    int positionElement;
+    std::string xPositionString, yPositionString, zPositionString;
+    std::vector<double> xPositionsVec, yPositionsVec, zPositionsVec;
 
   private:
     static PrimaryGeneratorAction* fgInstance;

@@ -42,6 +42,7 @@
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction* PrimaryGeneratorAction::fgInstance = 0;
@@ -121,9 +122,43 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
       combined = X17+direction;
       PhaseSpaceEvent.SetDecay(combined, particle_definition.size(),particle_mass.data());
 
+      std::ifstream xPositionsFile("X17_xpositions.txt");
+      if (xPositionsFile.is_open()) {
+         while (xPositionsFile.good()) {
+            getline(xPositionsFile, xPositionString);
+            double xPositionDouble = atof(xPositionString.c_str());
+            xPositionsVec.push_back(xPositionDouble);
+         }
+         xPositionsVec.pop_back();
+      }
+
+      std::ifstream yPositionsFile("X17_ypositions.txt");
+      if (yPositionsFile.is_open()) {
+         while (yPositionsFile.good()) {
+            getline(yPositionsFile, yPositionString);
+            double yPositionDouble = atof(yPositionString.c_str());
+            yPositionsVec.push_back(yPositionDouble);
+         }
+         yPositionsVec.pop_back();
+      }
+
+      std::ifstream zPositionsFile("X17_zpositions.txt");
+      if (zPositionsFile.is_open()) {
+         while (zPositionsFile.good()) {
+            getline(zPositionsFile, zPositionString);
+            double zPositionDouble = atof(zPositionString.c_str());
+            zPositionsVec.push_back(zPositionDouble);
+         }
+         zPositionsVec.pop_back();
+      }
+
+      // random number between 0 and xPositionsVec.size()-1
+      srand (time(NULL));
+      positionElement = rand() % xPositionsVec.size();
+
       double Weight = PhaseSpaceEvent.Generate();
       for (int i = 0;i<particle_definition.size();i++){
-         G4PrimaryVertex* vertex = new G4PrimaryVertex(G4ThreeVector(0.0, 0.0, 0.0),0.0*s);
+         G4PrimaryVertex* vertex = new G4PrimaryVertex(G4ThreeVector(xPositionsVec[positionElement], yPositionsVec[positionElement], zPositionsVec[positionElement]),0.0*s);
          particle_lorentz[i] = PhaseSpaceEvent.GetDecay(i);
          G4PrimaryParticle* thePrimaryParticle = new G4PrimaryParticle(particle_definition[i], particle_lorentz[i]->Px()*GeV,particle_lorentz[i]->Py()*GeV,particle_lorentz[i]->Pz()*GeV);
          vertex->SetPrimary(thePrimaryParticle);
