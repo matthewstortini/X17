@@ -6,13 +6,15 @@ import time
 from numba import jit
 from tqdm import tqdm
 import json, os
+import random
 #np.set_printoptions(threshold=sys.maxsize)
 
 def main():
 
     #process_angles()
     #process_depth()
-    resonance_positions()
+    #resonance_positions()
+    resonance_positions_with_weights()
 
 def process_angles():
 
@@ -147,6 +149,65 @@ def resonance_positions():
     # Save the pandas dataframe.
     procdf.to_hdf('{}/{}'.format(data_dir,sys.argv[2]), key='procdf', mode='w')
 
+
+def resonance_positions_with_weights():
+
+    if(len(sys.argv) != 3):
+        print('Usage: postprocesshdf5.py [input filename.hdf5 (with extension)] [output filename.hdf5 (with extension)]')
+        sys.exit()
+
+    start = time.time()
+    print('In Progress...')
+
+    pd.options.mode.chained_assignment = None
+
+    # Import g4simple data
+    with open("data.json") as f:
+        data = json.load(f)
+    data_dir = os.path.expandvars(data["data_dir"])
+
+    g4sfile = h5py.File('{}/{}'.format(data_dir,sys.argv[1]), 'r')
+    g4sntuple = g4sfile['default_ntuples']['g4sntuple']
+
+    # Taking data from g4sntuple and organizing it into a pandas dataframe.
+    g4sdf = pd.DataFrame(np.array(g4sntuple['event']['pages']), columns=['event'])
+    g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['step']['pages']),
+                       columns=['step']), lsuffix = '_caller', rsuffix = '_other')
+    g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['pid']['pages']),
+                       columns=['pid']), lsuffix = '_caller', rsuffix = '_other')
+    g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['x']['pages']),
+                       columns=['x']), lsuffix = '_caller', rsuffix = '_other')
+    g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['y']['pages']),
+                       columns=['y']), lsuffix = '_caller', rsuffix = '_other')
+    g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['z']['pages']),
+                       columns=['z']), lsuffix = '_caller', rsuffix = '_other')
+    g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['KE']['pages']),
+                       columns=['KE']), lsuffix = '_caller', rsuffix = '_other')
+    g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['volID']['pages']),
+                       columns=['volID']), lsuffix = '_caller', rsuffix = '_other')
+
+    procdf = g4sdf.loc[(g4sdf.pid==2212)&(g4sdf.volID==2)]
+    procdf = procdf.drop(columns=['event','pid','step','volID'])   
+
+    procdf['KE'] = procdf['KE']*1000
+ 
+    def lorentzian(E):
+        return (1/4)*(10.7**2/((E-441)**2+(10.7/2)**2))
+
+    randoms = np.random.uniform(0,1,len(procdf))
+
+    procdf['weight'] = lorentzian(procdf['KE'])
+    procdf['random'] = randoms
+
+    procdf['cap'] = procdf['weight'] - procdf['random']
+    procdf = procdf.loc[procdf.cap>0]
+
+    procdf = procdf.drop(columns=['cap','weight','random'])
+
+    procdf['KE'] = procdf['KE']/1000
+
+    # Save the pandas dataframe.
+    procdf.to_hdf('{}/{}'.format(data_dir,sys.argv[2]), key='procdf', mode='w')
 
 if __name__ == '__main__':
         main()
