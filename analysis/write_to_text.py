@@ -12,7 +12,9 @@ with open("data.json") as f:
 data_dir = os.path.expandvars(data["data_dir"])
 
 # read in pandas dataframe
-df =  pd.read_hdf("{}/{}".format(data_dir,sys.argv[1]), key="procdf")
+df =  pd.read_hdf("{}/{}".format(data_dir,sys.argv[1]))
+
+df = df.reset_index(drop=True)
 
 print(df)
 
