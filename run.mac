@@ -15,7 +15,7 @@
 /tracking/recordAllSteps
 
 ##initialize the run
-/generator/setDecayMode gun
+/generator/setDecayMode capture
 /run/initialize
 /process/em/printParameters
 

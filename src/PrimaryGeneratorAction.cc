@@ -77,7 +77,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() : G4VUserPrimaryGeneratorAction
    resonanceenergy = 0.01815;
  
    fDecayModeCmd = new G4UIcmdWithAString("/generator/setDecayMode", this);
-   std::string candidates = "gamma x17 gun";
+   std::string candidates = "gamma x17 gun capture";
    fDecayModeCmd->SetCandidates(candidates.c_str());
    fDecayModeCmd->SetGuidance("Set decay mode of interest");
    fMode = "kX17";
@@ -109,7 +109,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
   
    // if not running in gun mode, we load in the positions of our excited states
    // these positions are to be obtained through previous runs in gun mode
-   if ( fMode != "kGun" ) {
+   if ( fMode != "kGun" && fMode != "kCapture" ) {
       std::ifstream xPositionsFile("X17_xpositions.txt");
       if (xPositionsFile.is_open()) {
          while (xPositionsFile.good()) {
@@ -176,9 +176,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
       G4PrimaryParticle* thePrimaryParticle = new G4PrimaryParticle(G4Gamma::GammaDefinition(),ux*resonanceenergy*GeV,uy*resonanceenergy*GeV,uz*resonanceenergy*GeV);
       vertex->SetPrimary(thePrimaryParticle);
       anEvent->AddPrimaryVertex(vertex);
-   }  
+   }
    
-   if ( fMode == "kGun" ) {;}
+   if ( fMode == "kGun" || fMode == "kCapture" ) {;}
 
    fParticleGun->GeneratePrimaryVertex(anEvent);
 
@@ -192,6 +192,7 @@ void PrimaryGeneratorAction::SetNewValue(G4UIcommand *command, G4String newValue
       if(newValues == "x17") fMode = "kX17";
       if(newValues == "gamma") fMode = "kGamma";
       if(newValues == "gun") fMode = "kGun";
+      if(newValues == "capture") fMode = "kCapture";
    }
 
    if (command == fX17MassCmd) X17mass = fX17MassCmd->GetNewDoubleValue(newValues);

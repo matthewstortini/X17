@@ -186,6 +186,9 @@ def resonance_positions_with_weights():
     g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['volID']['pages']),
                        columns=['volID']), lsuffix = '_caller', rsuffix = '_other')
 
+    print(g4sdf)
+    exit()
+
     procdf = g4sdf.loc[(g4sdf.pid==2212)&(g4sdf.volID==2)]
     procdf = procdf.drop(columns=['event','pid','step','volID'])   
 

@@ -27,6 +27,15 @@
 #include "SteppingAction.hh"
 #include "PrimaryGeneratorAction.hh"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <iostream>
+
+#ifndef M_PI
+#define M_PI    3.14159265358979323846f
+#endif
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::ResetVars() {
@@ -358,8 +367,25 @@ void SteppingAction::UserSteppingAction(const G4Step *step) {
    if(!fRecordAllSteps && step->GetTotalEnergyDeposit() == 0) return;
 
    // kill proton at 300 keV
-   if ( primary->GetfMode() == "kGun") {
+   if ( primary->GetfMode() == "kGun" ) {
       if (step->GetPreStepPoint()->GetKineticEnergy() <= 0.300) step->GetTrack()->SetTrackStatus(fStopAndKill);
+   }
+
+   // compute capture probabilities if running in capture mode
+   // stop proton if it is captured, only record step where it is captured
+   if ( primary->GetfMode() == "kCapture" ) {
+      double KineticEnergy = (step->GetTrack()->GetKineticEnergy())*1000;
+      cout << KineticEnergy << endl;
+      double CaptureProbability = 10.7;
+      CaptureProbability /= 2*M_PI;
+      CaptureProbability /= (KineticEnergy-441)*(KineticEnergy-441)+(10.7/2)*(10.7/2);
+      double RandomNumber = rand()/(double)RAND_MAX;
+      if ( RandomNumber <= CaptureProbability ) {
+         step->GetTrack()->SetTrackStatus(fStopAndKill);
+         cout << "Capture Probabilty: " << CaptureProbability << endl;
+         cout << "CAPTURED" << endl;
+      }
+      else return;
    }
 
    // Now record post-step info

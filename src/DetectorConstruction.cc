@@ -154,7 +154,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
       = new G4PVPlacement(
             0,                           // no rotation
             G4ThreeVector(0,0,-10*mm),   // at (0,0,-10) mm
-            foil_1_logical,                // its logical volume                         
+            foil_1_logical,              // its logical volume                         
             "foil_1",                    // its name
             logicWorld,                  // its mother volume
             false,                       // no boolean operation
@@ -185,12 +185,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
       = new G4PVPlacement(
             0,                      // no rotation
             G4ThreeVector(0,0,0),   // at (0,0,0) mm
-            foil_2_logical,           // its logical volume                         
+            foil_2_logical,         // its logical volume                         
             "foil_2",               // its name
-            logicWorld,                  // its mother volume
-            false,                       // no boolean operation
-            0,                           // copy number
-            checkOverlaps);              // checking overlaps 
+            logicWorld,             // its mother volume
+            false,                  // no boolean operation
+            0,                      // copy number
+            checkOverlaps);         // checking overlaps 
 
    G4VisAttributes* foil_2_VisAtt = new G4VisAttributes(G4Colour(0,1.0,0));
    foil_2_logical->SetVisAttributes(foil_2_VisAtt);
