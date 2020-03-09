@@ -375,15 +375,15 @@ void SteppingAction::UserSteppingAction(const G4Step *step) {
    // stop proton if it is captured, only record step where it is captured
    if ( primary->GetfMode() == "kCapture" ) {
       double KineticEnergy = (step->GetTrack()->GetKineticEnergy())*1000;
-      cout << KineticEnergy << endl;
+      // cout << KineticEnergy << endl;
       double CaptureProbability = 10.7;
       CaptureProbability /= 2*M_PI;
       CaptureProbability /= (KineticEnergy-441)*(KineticEnergy-441)+(10.7/2)*(10.7/2);
       double RandomNumber = rand()/(double)RAND_MAX;
       if ( RandomNumber <= CaptureProbability ) {
          step->GetTrack()->SetTrackStatus(fStopAndKill);
-         cout << "Capture Probabilty: " << CaptureProbability << endl;
-         cout << "CAPTURED" << endl;
+         // cout << "Capture Probabilty: " << CaptureProbability << endl;
+         // cout << "CAPTURED" << endl;
       }
       else return;
    }

@@ -11,7 +11,8 @@ def main():
 
     #angles()
     #depths()
-    resonance_positions()
+    #resonance_positions()
+    spectrum()
 
 def angles():
 
@@ -89,6 +90,29 @@ def resonance_positions():
 
     plt.hist(df['z'], np.arange(-1,15,0.1), histtype='step', color = 'black')
     plt.xlabel('z depth (micron)', ha='right', x=1.0)
+    plt.ylabel('counts', ha='right', y=1.0)
+    #plt.ylim(300,1000)
+    #plt.xlim(0,60)
+    plt.tight_layout()
+    plt.show()
+
+
+def spectrum():
+
+    if(len(sys.argv) != 2):
+        print('Usage: plotting.py [input .hdf5 file (with extension)]')
+        sys.exit()
+
+    with open("data.json") as f:
+        data = json.load(f)
+    data_dir = os.path.expandvars(data["data_dir"])
+
+    # read in pandas dataframe, and pull out data of interest
+    df =  pd.read_hdf("{}/{}".format(data_dir,sys.argv[1]), key="procdf")
+    df['KE'] = df['KE']*1000
+
+    plt.hist(df['KE'], np.arange(0,1000,1), histtype='step', color = 'black')
+    plt.xlabel('capture KE (keV)', ha='right', x=1.0)
     plt.ylabel('counts', ha='right', y=1.0)
     #plt.ylim(300,1000)
     #plt.xlim(0,60)
