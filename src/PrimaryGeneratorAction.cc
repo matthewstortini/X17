@@ -142,24 +142,18 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
    }
    
    if ( fMode == "kX17" ) {
-      direction.SetPx(ux*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));
-      direction.SetPy(uy*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));
-      direction.SetPz(uz*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));
-      direction.SetE(resonanceenergy-X17mass); //in GeV
+      FourVector.SetPx(ux*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));
+      FourVector.SetPy(uy*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));
+      FourVector.SetPz(uz*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));
+      FourVector.SetE(resonanceenergy); //in GeV
 
-      X17.SetPx(0);
-      X17.SetPy(0);
-      X17.SetPz(0);
-      X17.SetE(X17mass); //in GeV
-
-      combined = X17+direction;
-      PhaseSpaceEvent.SetDecay(combined, particle_definition.size(),particle_mass.data());
+      PhaseSpaceEvent.SetDecay(FourVector, particle_definition.size(),particle_mass.data());
 
       // random number between 0 and xPositionsVec.size()-1
       positionElement = rand() % xPositionsVec.size();
 
       double Weight = PhaseSpaceEvent.Generate();
-      for (int i = 0;i<particle_definition.size();i++){
+      for ( int i = 0;i<particle_definition.size();i++ ) {
          G4PrimaryVertex* vertex = new G4PrimaryVertex(G4ThreeVector(xPositionsVec[positionElement], yPositionsVec[positionElement], zPositionsVec[positionElement]),0.0*s);
          particle_lorentz[i] = PhaseSpaceEvent.GetDecay(i);
          G4PrimaryParticle* thePrimaryParticle = new G4PrimaryParticle(particle_definition[i], particle_lorentz[i]->Px()*GeV,particle_lorentz[i]->Py()*GeV,particle_lorentz[i]->Pz()*GeV);

@@ -89,9 +89,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction, public G4UI
     G4double resonanceenergy;
 
     TGenPhaseSpace PhaseSpaceEvent;
-    TLorentzVector X17;
-    TLorentzVector direction;
-    TLorentzVector combined;
+    TLorentzVector FourVector;
 
     std::vector<double> particle_mass;
     std::vector<TLorentzVector*> particle_lorentz;
