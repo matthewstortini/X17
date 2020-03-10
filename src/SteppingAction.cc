@@ -63,7 +63,7 @@ void SteppingAction::ResetVars() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(PrimaryGeneratorAction* prim) : primary(prim), fNEvents(0), fEventNumber(0) {
+SteppingAction::SteppingAction(PrimaryGeneratorAction* prim) : fNEvents(0), fEventNumber(0), primary(prim) {
 
    ResetVars();
 
@@ -110,7 +110,8 @@ G4VAnalysisManager* SteppingAction::GetAnalysisManager() {
    if(fFormat == kXml) return G4Xml::G4AnalysisManager::Instance();
    if(fFormat == kRoot) return G4Root::G4AnalysisManager::Instance();
    if(fFormat == kHdf5) return G4Hdf5::G4AnalysisManager::Instance();
-   
+   else return G4Csv::G4AnalysisManager::Instance();  
+ 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -287,7 +288,7 @@ void SteppingAction::UserSteppingAction(const G4Step *step) {
       man->FinishNtuple();
 
       // look for filename set by macro command: /analysis/setFileName [name]
-      if(man->GetFileName() == "") man->SetFileName("g4simpleout");
+      if(man->GetFileName() == "") man->SetFileName("g4output");
       cout << "Opening file " << man->GetFileName() << endl;
       man->OpenFile();
 

@@ -62,7 +62,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() : G4VUserPrimaryGeneratorAction
    particle_definition.push_back(G4Electron::ElectronDefinition());
    particle_definition.push_back(G4Positron::PositronDefinition());
 
-   for (int i = 0;i<particle_definition.size();i++) {
+   for (unsigned long i = 0;i<particle_definition.size();i++) {
       particle_mass.push_back(particle_definition[i]->GetPDGMass()/(1.*GeV));
    }
 
@@ -153,7 +153,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
       positionElement = rand() % xPositionsVec.size();
 
       double Weight = PhaseSpaceEvent.Generate();
-      for ( int i = 0;i<particle_definition.size();i++ ) {
+      for ( unsigned long i = 0;i<particle_definition.size();i++ ) {
          G4PrimaryVertex* vertex = new G4PrimaryVertex(G4ThreeVector(xPositionsVec[positionElement], yPositionsVec[positionElement], zPositionsVec[positionElement]),0.0*s);
          particle_lorentz[i] = PhaseSpaceEvent.GetDecay(i);
          G4PrimaryParticle* thePrimaryParticle = new G4PrimaryParticle(particle_definition[i], particle_lorentz[i]->Px()*GeV,particle_lorentz[i]->Py()*GeV,particle_lorentz[i]->Pz()*GeV);

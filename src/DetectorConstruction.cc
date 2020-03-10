@@ -119,16 +119,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
             germanium,             // its material
             "bege");               // its name
 
-   G4VPhysicalVolume* bege_phys
-      = new G4PVPlacement(
-            0,                        // no rotation
-            G4ThreeVector(0,0,1*m),   // at (0,0,1000) mm
-            bege_logical,             // its logical volume                         
-            "bege",                   // its name
-            logicWorld,               // its mother volume
-            false,                    // no boolean operation
-            0,                        // copy number
-            checkOverlaps);           // checking overlaps 
+   new G4PVPlacement(
+       0,                        // no rotation
+       G4ThreeVector(0,0,1*m),   // at (0,0,1000) mm
+       bege_logical,             // its logical volume                         
+       "bege",                   // its name
+       logicWorld,               // its mother volume
+       false,                    // no boolean operation
+       0,                        // copy number
+       checkOverlaps);           // checking overlaps 
 
    G4VisAttributes* begeVisAtt = new G4VisAttributes(G4Colour(1,1.0,0));
    bege_logical->SetVisAttributes(begeVisAtt);
@@ -150,16 +149,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
             lithium,                 // its material
             "foil_1");               // its name
 
-   G4VPhysicalVolume* foil_1_phys
-      = new G4PVPlacement(
-            0,                           // no rotation
-            G4ThreeVector(0,0,-10*mm),   // at (0,0,-10) mm
-            foil_1_logical,              // its logical volume                         
-            "foil_1",                    // its name
-            logicWorld,                  // its mother volume
-            false,                       // no boolean operation
-            0,                           // copy number
-            checkOverlaps);              // checking overlaps 
+   new G4PVPlacement(
+       0,                           // no rotation
+       G4ThreeVector(0,0,-10*mm),   // at (0,0,-10) mm
+       foil_1_logical,              // its logical volume                         
+       "foil_1",                    // its name
+       logicWorld,                  // its mother volume
+       false,                       // no boolean operation
+       0,                           // copy number
+       checkOverlaps);              // checking overlaps 
 
    G4VisAttributes* foil_1_VisAtt = new G4VisAttributes(G4Colour(0,1.0,0));
    foil_1_logical->SetVisAttributes(foil_1_VisAtt);
@@ -181,16 +179,16 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
             lithium,                 // its material
             "foil_2");               // its name
 
-   G4VPhysicalVolume* foil_2_phys   
-      = new G4PVPlacement(
-            0,                      // no rotation
-            G4ThreeVector(0,0,0),   // at (0,0,0) mm
-            foil_2_logical,         // its logical volume                         
-            "foil_2",               // its name
-            logicWorld,             // its mother volume
-            false,                  // no boolean operation
-            0,                      // copy number
-            checkOverlaps);         // checking overlaps 
+      
+   new G4PVPlacement(
+       0,                      // no rotation
+       G4ThreeVector(0,0,0),   // at (0,0,0) mm
+       foil_2_logical,         // its logical volume                         
+       "foil_2",               // its name
+       logicWorld,             // its mother volume
+       false,                  // no boolean operation
+       0,                      // copy number
+       checkOverlaps);         // checking overlaps 
 
    G4VisAttributes* foil_2_VisAtt = new G4VisAttributes(G4Colour(0,1.0,0));
    foil_2_logical->SetVisAttributes(foil_2_VisAtt);
