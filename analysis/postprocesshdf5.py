@@ -11,11 +11,13 @@ import random
 
 def main():
 
-    #process_angles()
-    #process_depth()
-    resonance_positions()
+    #true_angles()
+    #proton_depths()
+    capture_positions()
 
-def process_angles():
+def true_angles():
+    ''' created to pull out angles between e+e- when running in x17 mode. this computes the actual angle between the particles, not
+        necessarily the angle between them that may be measured (for instance if one scatters before being measured). '''
 
     if(len(sys.argv) != 3):
         print('Usage: postprocesshdf5.py [input filename.hdf5 (with extension)] [output filename.hdf5 (with extension)]')
@@ -26,11 +28,12 @@ def process_angles():
 
     pd.options.mode.chained_assignment = None
 
-    # Import g4simple data
+    # set data directory where data is stored
     with open("data.json") as f:
         data = json.load(f)
     data_dir = os.path.expandvars(data["data_dir"])
 
+    # import data to be read
     g4sfile = h5py.File('{}/{}'.format(data_dir,sys.argv[1]), 'r')
     g4sntuple = g4sfile['default_ntuples']['g4sntuple']
 
@@ -65,10 +68,12 @@ def process_angles():
     procdf.drop(columns=['pdx', 'pdy','pdz'])
 
     # Save the pandas dataframe.
-    procdf.to_hdf('{}'.format(data_dir,sys.argv[2]), key='procdf', mode='w')
+    procdf.to_hdf('{}/{}'.format(data_dir,sys.argv[2]), key='procdf', mode='w')
 
 
-def process_depth():
+def proton_depths():
+    ''' this function was created to track the proton when running in gun mode to see how far it penetrates into the
+        geometries one chooses to track in the macro file when running the simulation. '''
 
     if(len(sys.argv) != 3):
         print('Usage: postprocesshdf5.py [input filename.hdf5 (with extension)] [output filename.hdf5 (with extension)]')
@@ -79,11 +84,12 @@ def process_depth():
 
     pd.options.mode.chained_assignment = None
 
-    # Import g4simple data
+    # set data directory where data is stored
     with open("data.json") as f:
         data = json.load(f)
     data_dir = os.path.expandvars(data["data_dir"])
 
+    # import data to be read
     g4sfile = h5py.File('{}/{}'.format(data_dir,sys.argv[1]), 'r')
     g4sntuple = g4sfile['default_ntuples']['g4sntuple']
 
@@ -103,10 +109,15 @@ def process_depth():
     procdf = g4sdf.loc[(g4sdf.pid==2212)&(g4sdf.step>0)&(g4sdf.KE>0)&(g4sdf.volID!=0)]
 
     # Save the pandas dataframe.
-    procdf.to_hdf('{}'.format(data_dir,sys.argv[2]), key='procdf', mode='w')
+    procdf.to_hdf('{}/{}'.format(data_dir,sys.argv[2]), key='procdf', mode='w')
 
 
-def resonance_positions():
+def capture_positions():
+    ''' for postprocessing data after running in capture mode, with /tracking/recordAllSteps in the macro. the
+        purpose of this script is to pull out the position that protons are captured at. this data can then be
+        used to set the position of X17s when running in X17 mode. to convert the hdf5 file output here to .txt
+        files that the X17 PrimaryGenerator uses, use the script write_to_text.py -- this writes the positions
+        to a .txt file and saves them to the correct directory. '''
 
     if(len(sys.argv) != 3):
         print('Usage: postprocesshdf5.py [input filename.hdf5 (with extension)] [output filename.hdf5 (with extension)]')
@@ -117,11 +128,12 @@ def resonance_positions():
 
     pd.options.mode.chained_assignment = None
 
-    # Import g4simple data
+    # set data directory where data is stored
     with open("data.json") as f:
         data = json.load(f)
     data_dir = os.path.expandvars(data["data_dir"])
 
+    # import data to be read
     g4sfile = h5py.File('{}/{}'.format(data_dir,sys.argv[1]), 'r')
     g4sntuple = g4sfile['default_ntuples']['g4sntuple']
 
@@ -141,9 +153,11 @@ def resonance_positions():
                        columns=['KE']), lsuffix = '_caller', rsuffix = '_other')
     g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['volID']['pages']),
                        columns=['volID']), lsuffix = '_caller', rsuffix = '_other')
-   
+    
+    # here i only want to look at captures in volume 2, but one can change this if they please
     procdf = g4sdf.loc[(g4sdf.step!=0)&(g4sdf.pid==2212)&(g4sdf.volID==2)]
 
+    # drop unnecessary columns
     procdf = procdf.drop(columns=['volID','step','event','pid'])
 
     # Save the pandas dataframe.
