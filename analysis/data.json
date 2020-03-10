@@ -1,3 +1,4 @@
 {
-  "data_dir":"$X17DATADIR"
+  "data_dir":"$X17DATADIR",
+  "x17_dir":"$X17DIR"
 }
