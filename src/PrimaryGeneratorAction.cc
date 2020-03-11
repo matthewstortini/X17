@@ -42,7 +42,6 @@
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction* PrimaryGeneratorAction::fgInstance = 0;
@@ -152,13 +151,12 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
       // random number between 0 and xPositionsVec.size()-1
       positionElement = rand() % xPositionsVec.size();
 
-      double Weight = PhaseSpaceEvent.Generate();
+      PhaseSpaceEvent.Generate();
       for ( unsigned long i = 0;i<particle_definition.size();i++ ) {
          G4PrimaryVertex* vertex = new G4PrimaryVertex(G4ThreeVector(xPositionsVec[positionElement], yPositionsVec[positionElement], zPositionsVec[positionElement]),0.0*s);
          particle_lorentz[i] = PhaseSpaceEvent.GetDecay(i);
          G4PrimaryParticle* thePrimaryParticle = new G4PrimaryParticle(particle_definition[i], particle_lorentz[i]->Px()*GeV,particle_lorentz[i]->Py()*GeV,particle_lorentz[i]->Pz()*GeV);
          vertex->SetPrimary(thePrimaryParticle);
-         vertex->SetWeight(Weight);
          anEvent->AddPrimaryVertex(vertex);
       }
    }
