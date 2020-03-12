@@ -77,10 +77,12 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction, public G4UI
     // so stepping action can grab the mode one runs in
     std::string GetfMode();
 
-    // for setting position of X17 given resonance positions from running in gun mode
+    // for setting position of excited state given capture positions/momenta from running in capture mode
     int positionElement;
     std::string xPositionString, yPositionString, zPositionString;
     std::vector<double> xPositionsVec, yPositionsVec, zPositionsVec;
+    std::string xMomentaString, yMomentaString, zMomentaString;
+    std::vector<double> xMomentaVec, yMomentaVec, zMomentaVec;
 
   private:
     static PrimaryGeneratorAction* fgInstance;

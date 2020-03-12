@@ -36,6 +36,7 @@
 #define M_PI    3.14159265358979323846f
 #endif
 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::ResetVars() {
@@ -49,15 +50,12 @@ void SteppingAction::ResetVars() {
    fX.clear();
    fY.clear();
    fZ.clear();
-   fLX.clear();
-   fLY.clear();
-   fLZ.clear();
    fPdX.clear();
    fPdY.clear();
    fPdZ.clear();
-   fT.clear();
+   fBeta.clear();
+   fMass.clear();
    fVolID.clear();
-   fIRep.clear();
     
 }
 
@@ -211,15 +209,12 @@ void SteppingAction::WriteRow(G4VAnalysisManager* man) {
       man->FillNtupleDColumn(row++, fX[i]);
       man->FillNtupleDColumn(row++, fY[i]);
       man->FillNtupleDColumn(row++, fZ[i]);
-      man->FillNtupleDColumn(row++, fLX[i]);
-      man->FillNtupleDColumn(row++, fLY[i]);
-      man->FillNtupleDColumn(row++, fLZ[i]);
       man->FillNtupleDColumn(row++, fPdX[i]);
       man->FillNtupleDColumn(row++, fPdY[i]);
       man->FillNtupleDColumn(row++, fPdZ[i]);
-      man->FillNtupleDColumn(row++, fT[i]);
+      man->FillNtupleDColumn(row++, fBeta[i]);
+      man->FillNtupleDColumn(row++, fMass[i]);
       man->FillNtupleIColumn(row++, fVolID[i]);
-      man->FillNtupleIColumn(row++, fIRep[i]);
    }
       
    // for event-wise, manager copies data from vectors over
@@ -250,15 +245,12 @@ void SteppingAction::UserSteppingAction(const G4Step *step) {
          man->CreateNtupleDColumn("x", fX);
          man->CreateNtupleDColumn("y", fY);
          man->CreateNtupleDColumn("z", fZ);
-         man->CreateNtupleDColumn("lx", fLX);
-         man->CreateNtupleDColumn("ly", fLY);
-         man->CreateNtupleDColumn("lz", fLZ);
          man->CreateNtupleDColumn("pdx", fPdX);
          man->CreateNtupleDColumn("pdy", fPdY);
          man->CreateNtupleDColumn("pdz", fPdZ);
-         man->CreateNtupleDColumn("t", fT);
+         man->CreateNtupleDColumn("beta", fBeta);
+         man->CreateNtupleDColumn("mass", fMass);
          man->CreateNtupleIColumn("volID", fVolID);
-         man->CreateNtupleIColumn("iRep", fIRep);
       }
       else if(fOption == kStepWise) {
          man->CreateNtupleIColumn("pid");
@@ -270,15 +262,12 @@ void SteppingAction::UserSteppingAction(const G4Step *step) {
          man->CreateNtupleDColumn("x");
          man->CreateNtupleDColumn("y");
          man->CreateNtupleDColumn("z");
-         man->CreateNtupleDColumn("lx");
-         man->CreateNtupleDColumn("ly");
-         man->CreateNtupleDColumn("lz");
          man->CreateNtupleDColumn("pdx");
          man->CreateNtupleDColumn("pdy");
          man->CreateNtupleDColumn("pdz");
-         man->CreateNtupleDColumn("t");
+         man->CreateNtupleDColumn("beta");
+         man->CreateNtupleDColumn("mass");
          man->CreateNtupleIColumn("volID");
-         man->CreateNtupleIColumn("iRep");
       }
       else {
          cout << "ERROR: Unknown output option " << fOption << endl;
@@ -347,17 +336,12 @@ void SteppingAction::UserSteppingAction(const G4Step *step) {
       fX.push_back(pos.x());
       fY.push_back(pos.y());
       fZ.push_back(pos.z());
-      G4TouchableHandle vol = step->GetPreStepPoint()->GetTouchableHandle();
-      G4ThreeVector lPos = vol->GetHistory()->GetTopTransform().TransformPoint(pos);
-      fLX.push_back(lPos.x());
-      fLY.push_back(lPos.y());
-      fLZ.push_back(lPos.z());
       G4ThreeVector momDir = step->GetPreStepPoint()->GetMomentumDirection();
       fPdX.push_back(momDir.x());
       fPdY.push_back(momDir.y());
       fPdZ.push_back(momDir.z());
-      fT.push_back(step->GetPreStepPoint()->GetGlobalTime());
-      fIRep.push_back(vol->GetReplicaNumber());
+      fBeta.push_back(step->GetPreStepPoint()->GetVelocity()/(2.99792458e+8*CLHEP::m/CLHEP::s));
+      fMass.push_back(step->GetTrack()->GetParticleDefinition()->GetPDGMass());
       if(fOption == kStepWise) WriteRow(man);
    }
 
@@ -398,17 +382,12 @@ void SteppingAction::UserSteppingAction(const G4Step *step) {
    fX.push_back(pos.x());
    fY.push_back(pos.y());
    fZ.push_back(pos.z());
-   G4TouchableHandle vol = step->GetPostStepPoint()->GetTouchableHandle();
-   G4ThreeVector lPos = vol->GetHistory()->GetTopTransform().TransformPoint(pos);
-   fLX.push_back(lPos.x());
-   fLY.push_back(lPos.y());
-   fLZ.push_back(lPos.z());
    G4ThreeVector momDir = step->GetPostStepPoint()->GetMomentumDirection();
    fPdX.push_back(momDir.x());
    fPdY.push_back(momDir.y());
    fPdZ.push_back(momDir.z());
-   fT.push_back(step->GetPostStepPoint()->GetGlobalTime());
-   fIRep.push_back(vol->GetReplicaNumber());
+   fBeta.push_back(step->GetPreStepPoint()->GetVelocity()/(2.99792458e+8*CLHEP::m/CLHEP::s));
+   fMass.push_back(step->GetTrack()->GetParticleDefinition()->GetPDGMass());
    if(fOption == kStepWise) WriteRow(man);
    
 }

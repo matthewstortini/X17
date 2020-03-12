@@ -74,15 +74,12 @@ class SteppingAction : public G4UserSteppingAction, public G4UImessenger {
     vector<G4double> fX;
     vector<G4double> fY;
     vector<G4double> fZ;
-    vector<G4double> fLX;
-    vector<G4double> fLY;
-    vector<G4double> fLZ;
     vector<G4double> fPdX;
     vector<G4double> fPdY;
     vector<G4double> fPdZ;
-    vector<G4double> fT;
+    vector<G4double> fBeta;
+    vector<G4double> fMass;
     vector<G4int> fVolID;
-    vector<G4int> fIRep;
 
     map<G4VPhysicalVolume*, int> fVolIDMap;
 

@@ -149,16 +149,31 @@ def capture_positions():
                        columns=['y']), lsuffix = '_caller', rsuffix = '_other')
     g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['z']['pages']),
                        columns=['z']), lsuffix = '_caller', rsuffix = '_other')
+    g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['pdx']['pages']),
+                       columns=['pdx']), lsuffix = '_caller', rsuffix = '_other')
+    g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['pdy']['pages']),
+                       columns=['pdy']), lsuffix = '_caller', rsuffix = '_other')
+    g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['pdz']['pages']),
+                       columns=['pdz']), lsuffix = '_caller', rsuffix = '_other')
     g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['KE']['pages']),
                        columns=['KE']), lsuffix = '_caller', rsuffix = '_other')
+    g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['mass']['pages']),
+                       columns=['mass']), lsuffix = '_caller', rsuffix = '_other')
+    g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['beta']['pages']),
+                       columns=['beta']), lsuffix = '_caller', rsuffix = '_other')
     g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['volID']['pages']),
                        columns=['volID']), lsuffix = '_caller', rsuffix = '_other')
     
     # here i only want to look at captures in volume 2, but one can change this if they please
     procdf = g4sdf.loc[(g4sdf.step!=0)&(g4sdf.pid==2212)&(g4sdf.volID==2)]
 
+    # calculate momenta and add to dataframe
+    procdf['px'] = procdf['mass']*procdf['beta']*procdf['pdx']/np.sqrt(1-procdf['beta']*procdf['beta'])
+    procdf['py'] = procdf['mass']*procdf['beta']*procdf['pdy']/np.sqrt(1-procdf['beta']*procdf['beta'])
+    procdf['pz'] = procdf['mass']*procdf['beta']*procdf['pdz']/np.sqrt(1-procdf['beta']*procdf['beta'])
+
     # drop unnecessary columns
-    procdf = procdf.drop(columns=['volID','step','event','pid'])
+    procdf = procdf.drop(columns=['volID','step','event','pid','pdx','pdy','pdz','mass','beta'])
 
     # Save the pandas dataframe.
     procdf.to_hdf('{}/{}'.format(data_dir,sys.argv[2]), key='procdf', mode='w')

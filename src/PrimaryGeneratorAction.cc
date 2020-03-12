@@ -42,6 +42,9 @@
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
 
+#include <iostream>
+using namespace std;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction* PrimaryGeneratorAction::fgInstance = 0;
@@ -106,10 +109,10 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
             uy = sinTheta*std::sin(phi),
             uz = cosTheta;
   
-   // if not running in gun mode, we load in the positions of our excited states
-   // these positions are to be obtained through previous runs in gun mode
+   // if not running in gun mode, we load in the positions/momenta of our excited states
+   // these positions/momenta are to be obtained through previous runs in capture mode
    if ( fMode != "kGun" && fMode != "kCapture" ) {
-      std::ifstream xPositionsFile("X17_xpositions.txt");
+      std::ifstream xPositionsFile("capture_xpositions.txt");
       if (xPositionsFile.is_open()) {
          while (xPositionsFile.good()) {
             getline(xPositionsFile, xPositionString);
@@ -119,7 +122,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
          xPositionsVec.pop_back();
       }
 
-      std::ifstream yPositionsFile("X17_ypositions.txt");
+      std::ifstream yPositionsFile("capture_ypositions.txt");
       if (yPositionsFile.is_open()) {
          while (yPositionsFile.good()) {
             getline(yPositionsFile, yPositionString);
@@ -129,7 +132,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
          yPositionsVec.pop_back();
       }
 
-      std::ifstream zPositionsFile("X17_zpositions.txt");
+      std::ifstream zPositionsFile("capture_zpositions.txt");
       if (zPositionsFile.is_open()) {
          while (zPositionsFile.good()) {
             getline(zPositionsFile, zPositionString);
@@ -138,9 +141,43 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
          }
          zPositionsVec.pop_back();
       }
+
+      std::ifstream xMomentaFile("capture_xmomenta.txt");
+      if (xMomentaFile.is_open()) {
+         while (xMomentaFile.good()) {
+            getline(xMomentaFile, xMomentaString);
+            double xMomentaDouble = atof(xMomentaString.c_str());
+            xMomentaDouble /= 1000;   // to convert MeV/c to GeV/c
+            xMomentaVec.push_back(xMomentaDouble);
+         }
+         xMomentaVec.pop_back();
+      }
+
+      std::ifstream yMomentaFile("capture_ymomenta.txt");
+      if (yMomentaFile.is_open()) {
+         while (yMomentaFile.good()) {
+            getline(yMomentaFile, yMomentaString);
+            double yMomentaDouble = atof(yMomentaString.c_str());
+            yMomentaDouble /= 1000;   // to convert MeV/c to GeV/c
+            yMomentaVec.push_back(yMomentaDouble);
+         }
+         yMomentaVec.pop_back();
+      }
+
+      std::ifstream zMomentaFile("capture_zmomenta.txt");
+      if (zMomentaFile.is_open()) {
+         while (zMomentaFile.good()) {
+            getline(zMomentaFile, zMomentaString);
+            double zMomentaDouble = atof(zMomentaString.c_str());
+            zMomentaDouble /= 1000;   // to convert MeV/c to GeV/c
+            zMomentaVec.push_back(zMomentaDouble);
+         }
+         zMomentaVec.pop_back();
+      }
    }
    
    if ( fMode == "kX17" ) {
+      cout << zMomentaVec[0] << endl;
       FourVector.SetPx(ux*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));
       FourVector.SetPy(uy*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));
       FourVector.SetPz(uz*std::sqrt(resonanceenergy*resonanceenergy-X17mass*X17mass));

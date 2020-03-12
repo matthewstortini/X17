@@ -76,9 +76,12 @@ set(X17_SCRIPTS
   vis.mac
   run.mac
   run.sh
-  X17_xpositions.txt
-  X17_ypositions.txt
-  X17_zpositions.txt  
+  capture_xpositions.txt
+  capture_ypositions.txt
+  capture_zpositions.txt
+  capture_xmomenta.txt
+  capture_ymomenta.txt
+  capture_zmomenta.txt
   )
 
 foreach(_script ${X17_SCRIPTS})
