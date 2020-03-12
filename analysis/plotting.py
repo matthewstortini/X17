@@ -9,10 +9,10 @@ plt.style.use('style.mplstyle')
 
 def main():
 
-    #angles()
+    angles()
     #depths()
     #resonance_positions()
-    spectrum()
+    #spectrum()
 
 def angles():
 

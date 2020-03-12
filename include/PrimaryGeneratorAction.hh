@@ -89,13 +89,16 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction, public G4UI
 
     G4double X17mass;
     G4double resonanceenergy;
+    G4double MassBeryllium8 = 7.456887267;
 
-    TGenPhaseSpace PhaseSpaceEvent;
-    TLorentzVector FourVector;
-
-    std::vector<double> particle_mass;
-    std::vector<TLorentzVector*> particle_lorentz;
-    std::vector<G4ParticleDefinition*> particle_definition;
+    TGenPhaseSpace ExcitedStateDecay;
+    TGenPhaseSpace X17Decay;
+    TLorentzVector FourVectorExcitedBeryllium8;
+    TLorentzVector* FourVectorBeryllium8Ptr;
+    TLorentzVector* FourVectorX17Ptr;
+    TLorentzVector FourVectorX17;
+    TLorentzVector* FourVectorElectronPtr;
+    TLorentzVector* FourVectorPositronPtr;
 
     G4UIcmdWithAString* fDecayModeCmd;
     std::string fMode;

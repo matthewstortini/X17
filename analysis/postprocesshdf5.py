@@ -11,9 +11,9 @@ import random
 
 def main():
 
-    #true_angles()
+    true_angles()
     #proton_depths()
-    capture_positions()
+    #capture_positions()
 
 def true_angles():
     ''' created to pull out angles between e+e- when running in x17 mode. this computes the actual angle between the particles, not
