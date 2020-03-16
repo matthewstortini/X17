@@ -97,6 +97,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction, public G4UI
     TLorentzVector FourVectorX17;
     TLorentzVector* FourVectorElectronPtr;
     TLorentzVector* FourVectorPositronPtr;
+    TLorentzVector* FourVectorGammaPtr;
 
     G4UIcmdWithAString* fDecayModeCmd;
     std::string fMode;

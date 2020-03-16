@@ -160,13 +160,6 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction() {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
-
-   G4double cosTheta = 2*G4UniformRand() - 1.;
-   G4double phi = 2*CLHEP::pi*G4UniformRand();
-   G4double sinTheta = std::sqrt(1. - cosTheta*cosTheta);
-   G4double ux = sinTheta*std::cos(phi),
-            uy = sinTheta*std::sin(phi),
-            uz = cosTheta;
   
    if ( fMode == "kX17" ) {
       // input necessary masses for this decay mode
@@ -206,22 +199,41 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
 
       // create e- and e+ primaries using parameters given from their 4-vectors, and place primaries at position of capture
       G4PrimaryVertex* ElectronVertex = new G4PrimaryVertex(G4ThreeVector(xPositionsVec[positionElement], yPositionsVec[positionElement], zPositionsVec[positionElement]),0.0*s);
-      G4PrimaryParticle* ElectronPrimary = new G4PrimaryParticle(G4Electron::ElectronDefinition(), FourVectorElectronPtr->Px()*GeV,FourVectorElectronPtr->Py()*GeV,FourVectorElectronPtr->Pz()*GeV);
+      G4PrimaryParticle* ElectronPrimary = new G4PrimaryParticle(G4Electron::ElectronDefinition(), FourVectorElectronPtr->Px()*GeV, FourVectorElectronPtr->Py()*GeV, FourVectorElectronPtr->Pz()*GeV);
       ElectronVertex->SetPrimary(ElectronPrimary);
       anEvent->AddPrimaryVertex(ElectronVertex);
       G4PrimaryVertex* PositronVertex = new G4PrimaryVertex(G4ThreeVector(xPositionsVec[positionElement], yPositionsVec[positionElement], zPositionsVec[positionElement]),0.0*s);
-      G4PrimaryParticle* PositronPrimary = new G4PrimaryParticle(G4Positron::PositronDefinition(), FourVectorPositronPtr->Px()*GeV,FourVectorPositronPtr->Py()*GeV,FourVectorPositronPtr->Pz()*GeV);
+      G4PrimaryParticle* PositronPrimary = new G4PrimaryParticle(G4Positron::PositronDefinition(), FourVectorPositronPtr->Px()*GeV, FourVectorPositronPtr->Py()*GeV, FourVectorPositronPtr->Pz()*GeV);
       PositronVertex->SetPrimary(PositronPrimary);
       anEvent->AddPrimaryVertex(PositronVertex);
    }
    
    if ( fMode == "kGamma" ) {
+      // input necessary masses for this decay mode
+      G4double ExcitedStateDecayMasses [2];
+      ExcitedStateDecayMasses[0] = MassBeryllium8;
+      ExcitedStateDecayMasses[1] = 0; // gamma mass
+
       // random number between 0 and xPositionsVec.size()-1
       positionElement = rand() % xPositionsVec.size();
-      G4PrimaryVertex* vertex = new G4PrimaryVertex(G4ThreeVector(xPositionsVec[positionElement], yPositionsVec[positionElement], zPositionsVec[positionElement]),0.0*s);
-      G4PrimaryParticle* thePrimaryParticle = new G4PrimaryParticle(G4Gamma::GammaDefinition(),ux*resonanceenergy*GeV,uy*resonanceenergy*GeV,uz*resonanceenergy*GeV);
-      vertex->SetPrimary(thePrimaryParticle);
-      anEvent->AddPrimaryVertex(vertex);
+
+      // create 4-vector for excited state beryllium based on momentum of captured proton and known energy of excited state
+      FourVectorExcitedBeryllium8.SetPx(xMomentaVec[positionElement]);
+      FourVectorExcitedBeryllium8.SetPy(yMomentaVec[positionElement]);
+      FourVectorExcitedBeryllium8.SetPz(zMomentaVec[positionElement]);
+      FourVectorExcitedBeryllium8.SetE(MassBeryllium8+resonanceenergy);
+
+      // generate excited state decay and create pointers to daughter product's 4-vectors
+      ExcitedStateDecay.SetDecay(FourVectorExcitedBeryllium8, 2, ExcitedStateDecayMasses);
+      ExcitedStateDecay.Generate();
+      FourVectorBeryllium8Ptr = ExcitedStateDecay.GetDecay(0);
+      FourVectorGammaPtr = ExcitedStateDecay.GetDecay(1);
+
+      // create gamma primary using parameters given from its 4-vector, and place primary at position of capture
+      G4PrimaryVertex* GammaVertex = new G4PrimaryVertex(G4ThreeVector(xPositionsVec[positionElement], yPositionsVec[positionElement], zPositionsVec[positionElement]),0.0*s);
+      G4PrimaryParticle* GammaPrimary = new G4PrimaryParticle(G4Gamma::GammaDefinition(), FourVectorGammaPtr->Px()*GeV, FourVectorGammaPtr->Py()*GeV, FourVectorGammaPtr->Pz()*GeV);
+      GammaVertex->SetPrimary(GammaPrimary);
+      anEvent->AddPrimaryVertex(GammaVertex);
    }
 
    if ( fMode == "kEplusEminus" ) {
@@ -249,11 +261,11 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
 
       // create e- and e+ primaries using parameters given from their 4-vectors, and place primaries at position of capture
       G4PrimaryVertex* ElectronVertex = new G4PrimaryVertex(G4ThreeVector(xPositionsVec[positionElement], yPositionsVec[positionElement], zPositionsVec[positionElement]),0.0*s);
-      G4PrimaryParticle* ElectronPrimary = new G4PrimaryParticle(G4Electron::ElectronDefinition(), FourVectorElectronPtr->Px()*GeV,FourVectorElectronPtr->Py()*GeV,FourVectorElectronPtr->Pz()*GeV);
+      G4PrimaryParticle* ElectronPrimary = new G4PrimaryParticle(G4Electron::ElectronDefinition(), FourVectorElectronPtr->Px()*GeV, FourVectorElectronPtr->Py()*GeV, FourVectorElectronPtr->Pz()*GeV);
       ElectronVertex->SetPrimary(ElectronPrimary);
       anEvent->AddPrimaryVertex(ElectronVertex);
       G4PrimaryVertex* PositronVertex = new G4PrimaryVertex(G4ThreeVector(xPositionsVec[positionElement], yPositionsVec[positionElement], zPositionsVec[positionElement]),0.0*s);
-      G4PrimaryParticle* PositronPrimary = new G4PrimaryParticle(G4Positron::PositronDefinition(), FourVectorPositronPtr->Px()*GeV,FourVectorPositronPtr->Py()*GeV,FourVectorPositronPtr->Pz()*GeV);
+      G4PrimaryParticle* PositronPrimary = new G4PrimaryParticle(G4Positron::PositronDefinition(), FourVectorPositronPtr->Px()*GeV, FourVectorPositronPtr->Py()*GeV, FourVectorPositronPtr->Pz()*GeV);
       PositronVertex->SetPrimary(PositronPrimary);
       anEvent->AddPrimaryVertex(PositronVertex);
    }
