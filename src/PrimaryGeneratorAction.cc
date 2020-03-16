@@ -41,6 +41,7 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
+#include "G4Proton.hh"
 
 #include <iostream>
 using namespace std;
@@ -257,7 +258,15 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
       anEvent->AddPrimaryVertex(PositronVertex);
    }
    
-   if ( fMode == "kGun" || fMode == "kCapture" ) {;}
+   if ( fMode == "kGun" || fMode == "kCapture" ) {
+      // create proton primary, setting its position, energy, and momentum direction
+      G4PrimaryVertex* ProtonVertex = new G4PrimaryVertex(0, 0, -20*mm, 0*s);
+      G4PrimaryParticle* ProtonPrimary = new G4PrimaryParticle(G4Proton::ProtonDefinition());
+      ProtonPrimary->SetKineticEnergy(1.00*MeV);
+      ProtonPrimary->SetMomentumDirection(G4ThreeVector(0, 0, 1));
+      ProtonVertex->SetPrimary(ProtonPrimary);
+      anEvent->AddPrimaryVertex(ProtonVertex);
+   }
 
    fParticleGun->GeneratePrimaryVertex(anEvent);
 

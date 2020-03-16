@@ -22,9 +22,4 @@
 # print volIDs
 /geometry/listPhysVols
 
-/gun/particle proton
-/gun/position 0 0 -20 mm
-/gun/energy 1.00 MeV
-/gun/direction 0 0 1
-
 /run/beamOn 1000000
