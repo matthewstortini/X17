@@ -133,65 +133,34 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
    bege_logical->SetVisAttributes(begeVisAtt);
 
    //
-   // first lithium target foil
+   // lithium target foil
    //
-   G4Tubs* foil_1_solid
-      = new G4Tubs("foil_1",   // its name
-            0*cm,              // innerRadius
-            3.5*cm,            // outerRadius
-            0.0150*mm,         // half-height 
-            0,                 // start angle
-            2*M_PI);           // spanning angle
+   G4Tubs* foil_solid
+      = new G4Tubs("foil",   // its name
+            0*cm,            // innerRadius
+            3.5*cm,          // outerRadius
+            0.0075*mm,       // half-height 
+            0,               // start angle
+            2*M_PI);         // spanning angle
 
-   G4LogicalVolume* foil_1_logical   
+   G4LogicalVolume* foil_logical   
       = new G4LogicalVolume(
-            foil_1_solid,            // its solid
-            lithium,                 // its material
-            "foil_1");               // its name
+            foil_solid,            // its solid
+            lithium,               // its material
+            "foil");               // its name
 
-   new G4PVPlacement(
-       0,                           // no rotation
-       G4ThreeVector(0,0,-10*mm),   // at (0,0,-10) mm
-       foil_1_logical,              // its logical volume                         
-       "foil_1",                    // its name
-       logicWorld,                  // its mother volume
-       false,                       // no boolean operation
-       0,                           // copy number
-       checkOverlaps);              // checking overlaps 
-
-   G4VisAttributes* foil_1_VisAtt = new G4VisAttributes(G4Colour(0,1.0,0));
-   foil_1_logical->SetVisAttributes(foil_1_VisAtt);
-
-   //
-   // second lithium target foil
-   //
-   G4Tubs* foil_2_solid
-      = new G4Tubs("foil_2",   // its name
-            0*cm,              // innerRadius
-            3.5*cm,            // outerRadius
-            0.0075*mm,         // half-height 
-            0,                 // start angle
-            2*M_PI);           // spanning angle
-
-   G4LogicalVolume* foil_2_logical   
-      = new G4LogicalVolume(
-            foil_2_solid,            // its solid
-            lithium,                 // its material
-            "foil_2");               // its name
-
-      
    new G4PVPlacement(
        0,                      // no rotation
-       G4ThreeVector(0,0,0),   // at (0,0,0) mm
-       foil_2_logical,         // its logical volume                         
-       "foil_2",               // its name
+       G4ThreeVector(0,0,0),   // at (0,0,0)
+       foil_logical,           // its logical volume                         
+       "foil",                 // its name
        logicWorld,             // its mother volume
        false,                  // no boolean operation
        0,                      // copy number
        checkOverlaps);         // checking overlaps 
 
-   G4VisAttributes* foil_2_VisAtt = new G4VisAttributes(G4Colour(0,1.0,0));
-   foil_2_logical->SetVisAttributes(foil_2_VisAtt);
+   G4VisAttributes* foil_VisAtt = new G4VisAttributes(G4Colour(0,1.0,0));
+   foil_logical->SetVisAttributes(foil_VisAtt);
 
 return physWorld;
 

@@ -164,8 +164,8 @@ def capture_positions():
     g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['volID']['pages']),
                        columns=['volID']), lsuffix = '_caller', rsuffix = '_other')
     
-    # here i only want to look at captures in volume 2, but one can change this if they please
-    procdf = g4sdf.loc[(g4sdf.step!=0)&(g4sdf.pid==2212)&(g4sdf.volID==2)]
+    # here i only want to look at captures in volume 1, but one can change this if they please
+    procdf = g4sdf.loc[(g4sdf.step!=0)&(g4sdf.pid==2212)&(g4sdf.volID==1)]
 
     # calculate momenta and add to dataframe
     procdf['px'] = procdf['mass']*procdf['beta']*procdf['pdx']/np.sqrt(1-procdf['beta']*procdf['beta'])

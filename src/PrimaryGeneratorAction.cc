@@ -272,9 +272,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
    
    if ( fMode == "kGun" || fMode == "kCapture" ) {
       // create proton primary, setting its position, energy, and momentum direction
-      G4PrimaryVertex* ProtonVertex = new G4PrimaryVertex(0, 0, -20*mm, 0*s);
+      G4PrimaryVertex* ProtonVertex = new G4PrimaryVertex(0, 0, -1*mm, 0*s);
       G4PrimaryParticle* ProtonPrimary = new G4PrimaryParticle(G4Proton::ProtonDefinition());
-      ProtonPrimary->SetKineticEnergy(1.00*MeV);
+      ProtonPrimary->SetKineticEnergy(450*keV);
       ProtonPrimary->SetMomentumDirection(G4ThreeVector(0, 0, 1));
       ProtonVertex->SetPrimary(ProtonPrimary);
       anEvent->AddPrimaryVertex(ProtonVertex);

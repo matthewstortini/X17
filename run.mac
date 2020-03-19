@@ -8,8 +8,7 @@
 /analysis/setFileName GenericName
 
 ##Set Volume ID's for Geometry Volumes (volume.in.geometry.file volID)
-#/geometry/setVolID foil_1 1
-/geometry/setVolID foil_2 2
+/geometry/setVolID foil 1
 
 ##to track all steps, including steps for which Edep=0
 /tracking/recordAllSteps
