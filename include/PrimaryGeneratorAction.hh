@@ -102,7 +102,6 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction, public G4UI
     G4UIcmdWithAString* fDecayModeCmd;
     std::string fMode;
     G4UIcmdWithADouble* fX17MassCmd;
-    G4UIcmdWithADouble* fResonanceEnergyCmd;
 
 };
 

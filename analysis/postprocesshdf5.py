@@ -11,9 +11,10 @@ import random
 
 def main():
 
-    true_angles()
+    #true_angles()
     #proton_depths()
-    #capture_positions()
+    capture_positions()
+    #pair_energy_loss()
 
 def true_angles():
     ''' created to pull out angles between e+e- when running in x17 mode. this computes the actual angle between the particles, not
@@ -174,6 +175,53 @@ def capture_positions():
 
     # drop unnecessary columns
     procdf = procdf.drop(columns=['volID','step','event','pid','pdx','pdy','pdz','mass','beta'])
+
+    print(len(procdf))
+
+    # Save the pandas dataframe.
+    procdf.to_hdf('{}/{}'.format(data_dir,sys.argv[2]), key='procdf', mode='w')
+
+
+def pair_energy_loss():
+    ''' this function was created to see how much energy e+e- pair loses in foil. We only keep events for which less than
+        100 keV is lost. '''
+
+    if(len(sys.argv) != 3):
+        print('Usage: postprocesshdf5.py [input filename.hdf5 (with extension)] [output filename.hdf5 (with extension)]')
+        sys.exit()
+
+    start = time.time()
+    print('In Progress...')
+
+    pd.options.mode.chained_assignment = None
+
+    # set data directory where data is stored
+    with open("data.json") as f:
+        data = json.load(f)
+    data_dir = os.path.expandvars(data["data_dir"])
+
+    # import data to be read
+    g4sfile = h5py.File('{}/{}'.format(data_dir,sys.argv[1]), 'r')
+    g4sntuple = g4sfile['default_ntuples']['g4sntuple']
+
+    # Taking data from g4sntuple and organizing it into a pandas dataframe.
+    g4sdf = pd.DataFrame(np.array(g4sntuple['event']['pages']), columns=['event'])
+    g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['step']['pages']),
+                       columns=['step']), lsuffix = '_caller', rsuffix = '_other')
+    g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['pid']['pages']),
+                       columns=['pid']), lsuffix = '_caller', rsuffix = '_other')
+    g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['Edep']['pages']),
+                       columns=['Edep']), lsuffix = '_caller', rsuffix = '_other')
+    g4sdf = g4sdf.join(pd.DataFrame(np.array(g4sntuple['volID']['pages']),
+                       columns=['volID']), lsuffix = '_caller', rsuffix = '_other')
+
+    df = g4sdf.loc[(g4sdf.volID<=1)]
+
+    procdf = pd.DataFrame(df.groupby(['event'], as_index=False)['Edep'].sum())
+
+    procdf = procdf.loc[(procdf.Edep<0.100)]
+
+    print(len(procdf))
 
     # Save the pandas dataframe.
     procdf.to_hdf('{}/{}'.format(data_dir,sys.argv[2]), key='procdf', mode='w')

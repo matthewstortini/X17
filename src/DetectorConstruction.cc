@@ -103,34 +103,264 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
             checkOverlaps);       // checking overlaps 
 
    //
-   // Ge bege detector
+   // Ge bege detector #1
    //
-   G4Tubs* bege_solid
-      = new G4Tubs("bege",   // its name
-            0*cm,            // innerRadius
-            3.5*cm,          // outerRadius
-            1.5*cm,          // half-height 
-            0,               // start angle
-            2*M_PI);         // spanning angle
+   G4RotationMatrix* myRotation1 = new G4RotationMatrix();
+   myRotation1->rotateX(90*degree);
+   myRotation1->rotateY(-(360*0/7)*degree);
+   G4double x1 = 150*std::cos(M_PI/2-(2*M_PI*0/7));
+   G4double y1 = 150*std::sin(M_PI/2-(2*M_PI*0/7));
+   G4ThreeVector position1(x1,y1,0);
 
-   G4LogicalVolume* bege_logical
+   G4Tubs* bege1_solid
+      = new G4Tubs("bege1",   // its name
+            0*cm,             // innerRadius
+            3.5*cm,           // outerRadius
+            1.5*cm,           // half-height 
+            0,                // start angle
+            2*M_PI);          // spanning angle
+
+   G4LogicalVolume* bege1_logical
       = new G4LogicalVolume(
-            bege_solid,            // its solid
-            germanium,             // its material
-            "bege");               // its name
+            bege1_solid,            // its solid
+            germanium,              // its material
+            "bege1");               // its name
 
    new G4PVPlacement(
-       0,                        // no rotation
-       G4ThreeVector(0,0,1*m),   // at (0,0,1000) mm
-       bege_logical,             // its logical volume                         
-       "bege",                   // its name
-       logicWorld,               // its mother volume
-       false,                    // no boolean operation
-       0,                        // copy number
-       checkOverlaps);           // checking overlaps 
+       myRotation1,                  // rotation
+       position1,                    // position
+       bege1_logical,               // its logical volume                         
+       "bege1",                     // its name
+       logicWorld,                  // its mother volume
+       false,                       // no boolean operation
+       0,                           // copy number
+       checkOverlaps);              // checking overlaps 
 
-   G4VisAttributes* begeVisAtt = new G4VisAttributes(G4Colour(1,1.0,0));
-   bege_logical->SetVisAttributes(begeVisAtt);
+   G4VisAttributes* bege1VisAtt = new G4VisAttributes(G4Colour(1,1.0,0));
+   bege1_logical->SetVisAttributes(bege1VisAtt);
+
+   //
+   // Ge bege detector #2
+   //
+   G4RotationMatrix* myRotation2 = new G4RotationMatrix();
+   myRotation2->rotateX(90*degree);
+   myRotation2->rotateY(-(360*1/7)*degree);
+   G4double x2 = 150*std::cos(M_PI/2-(2*M_PI*1/7));
+   G4double y2 = 150*std::sin(M_PI/2-(2*M_PI*1/7));   
+   G4ThreeVector position2(x2,y2,0);
+
+   G4Tubs* bege2_solid
+      = new G4Tubs("bege2",   // its name
+            0*cm,             // innerRadius
+            3.5*cm,           // outerRadius
+            1.5*cm,           // half-height 
+            0,                // start angle
+            2*M_PI);          // spanning angle
+
+   G4LogicalVolume* bege2_logical
+      = new G4LogicalVolume(
+            bege2_solid,            // its solid
+            germanium,              // its material
+            "bege2");               // its name
+
+   new G4PVPlacement(
+       myRotation2,                  // rotation
+       position2,                    // set position
+       bege2_logical,               // its logical volume                         
+       "bege2",                     // its name
+       logicWorld,                  // its mother volume
+       false,                       // no boolean operation
+       0,                           // copy number
+       checkOverlaps);              // checking overlaps 
+
+   G4VisAttributes* bege2VisAtt = new G4VisAttributes(G4Colour(1,1.0,0));
+   bege2_logical->SetVisAttributes(bege2VisAtt);
+
+
+   //
+   // Ge bege detector #3
+   //
+   G4RotationMatrix* myRotation3 = new G4RotationMatrix();
+   myRotation3->rotateX(90*degree);
+   myRotation3->rotateY(-(360*2/7)*degree);
+   G4double x3 = 150*std::cos(M_PI/2-(2*M_PI*2/7));
+   G4double y3 = 150*std::sin(M_PI/2-(2*M_PI*2/7));   
+   G4ThreeVector position3(x3,y3,0);
+
+   G4Tubs* bege3_solid
+      = new G4Tubs("bege3",   // its name
+            0*cm,             // innerRadius
+            3.5*cm,           // outerRadius
+            1.5*cm,           // half-height 
+            0,                // start angle
+            2*M_PI);          // spanning angle
+
+   G4LogicalVolume* bege3_logical
+      = new G4LogicalVolume(
+            bege3_solid,            // its solid
+            germanium,              // its material
+            "bege3");               // its name
+
+   new G4PVPlacement(
+       myRotation3,                  // rotation
+       position3,                    // set position
+       bege3_logical,               // its logical volume                         
+       "bege3",                     // its name
+       logicWorld,                  // its mother volume
+       false,                       // no boolean operation
+       0,                           // copy number
+       checkOverlaps);              // checking overlaps 
+
+   G4VisAttributes* bege3VisAtt = new G4VisAttributes(G4Colour(1,1.0,0));
+   bege3_logical->SetVisAttributes(bege3VisAtt);
+
+   //
+   // Ge bege detector #4
+   //
+   G4RotationMatrix* myRotation4 = new G4RotationMatrix();
+   myRotation4->rotateX(90*degree);
+   myRotation4->rotateY(-(360*3/7)*degree);
+   G4double x4 = 150*std::cos(M_PI/2-(2*M_PI*3/7));
+   G4double y4 = 150*std::sin(M_PI/2-(2*M_PI*3/7));   
+   G4ThreeVector position4(x4,y4,0);
+
+   G4Tubs* bege4_solid
+      = new G4Tubs("bege4",   // its name
+            0*cm,             // innerRadius
+            3.5*cm,           // outerRadius
+            1.5*cm,           // half-height 
+            0,                // start angle
+            2*M_PI);          // spanning angle
+
+   G4LogicalVolume* bege4_logical
+      = new G4LogicalVolume(
+            bege4_solid,            // its solid
+            germanium,              // its material
+            "bege4");               // its name
+
+   new G4PVPlacement(
+       myRotation4,                  // rotation
+       position4,                    // set position
+       bege4_logical,               // its logical volume                         
+       "bege4",                     // its name
+       logicWorld,                  // its mother volume
+       false,                       // no boolean operation
+       0,                           // copy number
+       checkOverlaps);              // checking overlaps 
+
+   G4VisAttributes* bege4VisAtt = new G4VisAttributes(G4Colour(1,1.0,0));
+   bege4_logical->SetVisAttributes(bege4VisAtt);
+
+   //
+   // Ge bege detector #5
+   //
+   G4RotationMatrix* myRotation5 = new G4RotationMatrix();
+   myRotation5->rotateX(90*degree);
+   myRotation5->rotateY(-(360*4/7)*degree);
+   G4double x5 = 150*std::cos(M_PI/2-(2*M_PI*4/7));
+   G4double y5 = 150*std::sin(M_PI/2-(2*M_PI*4/7));
+   G4ThreeVector position5(x5,y5,0);
+
+   G4Tubs* bege5_solid
+      = new G4Tubs("bege5",   // its name
+            0*cm,             // innerRadius
+            3.5*cm,           // outerRadius
+            1.5*cm,           // half-height 
+            0,                // start angle
+            2*M_PI);          // spanning angle
+
+   G4LogicalVolume* bege5_logical
+      = new G4LogicalVolume(
+            bege5_solid,            // its solid
+            germanium,              // its material
+            "bege4");               // its name
+
+   new G4PVPlacement(
+       myRotation5,                  // rotation
+       position5,                    // set position
+       bege5_logical,               // its logical volume                         
+       "bege5",                     // its name
+       logicWorld,                  // its mother volume
+       false,                       // no boolean operation
+       0,                           // copy number
+       checkOverlaps);              // checking overlaps 
+
+   G4VisAttributes* bege5VisAtt = new G4VisAttributes(G4Colour(1,1.0,0));
+   bege5_logical->SetVisAttributes(bege5VisAtt);
+
+   //
+   // Ge bege detector #6
+   //
+   G4RotationMatrix* myRotation6 = new G4RotationMatrix();
+   myRotation6->rotateX(90*degree);
+   myRotation6->rotateY(-(360*5/7)*degree);
+   G4double x6 = 150*std::cos(M_PI/2-(2*M_PI*5/7));
+   G4double y6 = 150*std::sin(M_PI/2-(2*M_PI*5/7));
+   G4ThreeVector position6(x6,y6,0);
+
+   G4Tubs* bege6_solid
+      = new G4Tubs("bege6",   // its name
+            0*cm,             // innerRadius
+            3.5*cm,           // outerRadius
+            1.5*cm,           // half-height 
+            0,                // start angle
+            2*M_PI);          // spanning angle
+
+   G4LogicalVolume* bege6_logical
+      = new G4LogicalVolume(
+            bege6_solid,            // its solid
+            germanium,              // its material
+            "bege6");               // its name
+
+   new G4PVPlacement(
+       myRotation6,                  // rotation
+       position6,                    // set position
+       bege5_logical,               // its logical volume                         
+       "bege6",                     // its name
+       logicWorld,                  // its mother volume
+       false,                       // no boolean operation
+       0,                           // copy number
+       checkOverlaps);              // checking overlaps 
+
+   G4VisAttributes* bege6VisAtt = new G4VisAttributes(G4Colour(1,1.0,0));
+   bege6_logical->SetVisAttributes(bege6VisAtt);
+
+   //
+   // Ge bege detector #7
+   //
+   G4RotationMatrix* myRotation7 = new G4RotationMatrix();
+   myRotation7->rotateX(90*degree);
+   myRotation7->rotateY(-(360*6/7)*degree);
+   G4double x7 = 150*std::cos(M_PI/2-(2*M_PI*6/7));
+   G4double y7 = 150*std::sin(M_PI/2-(2*M_PI*6/7));
+   G4ThreeVector position7(x7,y7,0);
+
+   G4Tubs* bege7_solid
+      = new G4Tubs("bege7",   // its name
+            0*cm,             // innerRadius
+            3.5*cm,           // outerRadius
+            1.5*cm,           // half-height 
+            0,                // start angle
+            2*M_PI);          // spanning angle
+
+   G4LogicalVolume* bege7_logical
+      = new G4LogicalVolume(
+            bege7_solid,            // its solid
+            germanium,              // its material
+            "bege7");               // its name
+
+   new G4PVPlacement(
+       myRotation7,                  // rotation
+       position7,                    // set position
+       bege7_logical,               // its logical volume                         
+       "bege7",                     // its name
+       logicWorld,                  // its mother volume
+       false,                       // no boolean operation
+       0,                           // copy number
+       checkOverlaps);              // checking overlaps 
+
+   G4VisAttributes* bege7VisAtt = new G4VisAttributes(G4Colour(1,1.0,0));
+   bege7_logical->SetVisAttributes(bege7VisAtt);
 
    //
    // lithium target foil
@@ -139,7 +369,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
       = new G4Tubs("foil",   // its name
             0*cm,            // innerRadius
             3.5*cm,          // outerRadius
-            0.0075*mm,       // half-height 
+            3.0045*mm,       // half-height 
             0,               // start angle
             2*M_PI);         // spanning angle
 
